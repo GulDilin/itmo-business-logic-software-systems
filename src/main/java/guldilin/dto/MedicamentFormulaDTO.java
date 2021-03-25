@@ -1,22 +1,16 @@
-package guldilin.model;
+package guldilin.dto;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-@Entity
-public class MedicamentFormula {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MedicamentFormulaDTO {
     private Integer id;
 
+    @NotNull
     private String title;
 
     private String text;
 
     private String description;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Medicament medicament;
 
     public Integer getId() {
         return id;
@@ -48,13 +42,5 @@ public class MedicamentFormula {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Medicament getMedicament() {
-        return medicament;
-    }
-
-    public void setMedicament(Medicament medicament) {
-        this.medicament = medicament;
     }
 }
