@@ -11,7 +11,7 @@ public class Process {
 
     private String status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Medicament medicament;
 
     public Integer getId() {

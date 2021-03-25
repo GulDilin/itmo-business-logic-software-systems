@@ -1,6 +1,9 @@
 package guldilin.model;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -12,23 +15,26 @@ public class Medicament {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicamentGroup group;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicamentFormula formula;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MedicamentClass medicamentClass;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> analogs;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private  Collection<Producer> producers;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private  Collection<ActiveSubstance> activeSubstances;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Collection<Process> processes = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -92,5 +98,13 @@ public class Medicament {
 
     public void setActiveSubstances(Collection<ActiveSubstance> activeSubstances) {
         this.activeSubstances = activeSubstances;
+    }
+
+    public Collection<Process> getProcesses() {
+        return processes;
+    }
+
+    public void setProcesses(Collection<Process> processes) {
+        this.processes = processes;
     }
 }

@@ -1,6 +1,8 @@
 package guldilin.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 public class MedicamentFormula {
@@ -14,6 +16,9 @@ public class MedicamentFormula {
     private String text;
 
     private String description;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Medicament medicament;
 
     public Integer getId() {
         return id;
@@ -47,4 +52,11 @@ public class MedicamentFormula {
         this.description = description;
     }
 
+    public Medicament getMedicament() {
+        return medicament;
+    }
+
+    public void setMedicament(Medicament medicament) {
+        this.medicament = medicament;
+    }
 }

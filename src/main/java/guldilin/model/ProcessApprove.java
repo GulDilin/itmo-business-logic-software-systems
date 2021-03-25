@@ -12,13 +12,13 @@ public class ProcessApprove {
 
     private String level;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Worker workerBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Worker workerTo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Process process;
 
     private Date created;

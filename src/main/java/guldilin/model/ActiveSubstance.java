@@ -14,7 +14,7 @@ public class ActiveSubstance {
 
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> medicaments;
 
     public Integer getId() {

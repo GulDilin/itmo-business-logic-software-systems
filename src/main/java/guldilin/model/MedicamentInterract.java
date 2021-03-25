@@ -9,10 +9,10 @@ public class MedicamentInterract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Medicament medicament1;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Medicament medicament2;
 
     private String description;

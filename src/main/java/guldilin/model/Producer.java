@@ -16,7 +16,7 @@ public class Producer {
 
     private String contact;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> medicaments;
 
     public Integer getId() {

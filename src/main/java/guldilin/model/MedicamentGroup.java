@@ -1,6 +1,8 @@
 package guldilin.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 public class MedicamentGroup {
@@ -12,6 +14,9 @@ public class MedicamentGroup {
     private String title;
 
     private String description;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Collection<Medicament> medicamentList = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -35,5 +40,13 @@ public class MedicamentGroup {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Collection<Medicament> getMedicamentList() {
+        return medicamentList;
+    }
+
+    public void setMedicamentList(Collection<Medicament> medicamentList) {
+        this.medicamentList = medicamentList;
     }
 }
