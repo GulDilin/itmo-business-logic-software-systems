@@ -12,7 +12,7 @@ public class Worker {
     private  String name;
 
     @ManyToOne
-    @JoinColumn(name = "id_role")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     private String phone;
