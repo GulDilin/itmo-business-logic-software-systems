@@ -1,6 +1,7 @@
 package guldilin.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Medicament {
@@ -19,6 +20,15 @@ public class Medicament {
 
     @OneToOne
     private MedicamentClass medicamentClass;
+
+    @ManyToMany
+    private Collection<Medicament> analogs;
+
+    @ManyToMany
+    private  Collection<Producer> producers;
+
+    @ManyToMany
+    private  Collection<ActiveSubstance> activeSubstances;
 
     public Integer getId() {
         return id;
@@ -58,5 +68,29 @@ public class Medicament {
 
     public void setMedicamentClass(MedicamentClass medicamentClass) {
         this.medicamentClass = medicamentClass;
+    }
+
+    public Collection<Medicament> getAnalogs() {
+        return analogs;
+    }
+
+    public void setAnalogs(Collection<Medicament> analogs) {
+        this.analogs = analogs;
+    }
+
+    public Collection<Producer> getProducers() {
+        return producers;
+    }
+
+    public void setProducers(Collection<Producer> producers) {
+        this.producers = producers;
+    }
+
+    public Collection<ActiveSubstance> getActiveSubstances() {
+        return activeSubstances;
+    }
+
+    public void setActiveSubstances(Collection<ActiveSubstance> activeSubstances) {
+        this.activeSubstances = activeSubstances;
     }
 }
