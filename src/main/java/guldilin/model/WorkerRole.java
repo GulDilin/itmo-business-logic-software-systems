@@ -16,7 +16,7 @@ public class WorkerRole {
 
     private Integer level;
 
-    @OneToMany(mappedBy = "role_id")
+    @OneToMany(mappedBy = "role_id", fetch = FetchType.LAZY)
     private Collection<Worker> workerList = new ArrayList<>();
 
     public Collection<Worker> getWorkerList() {

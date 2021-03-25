@@ -11,7 +11,7 @@ public class Worker {
 
     private  String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private WorkerRole role;
 
