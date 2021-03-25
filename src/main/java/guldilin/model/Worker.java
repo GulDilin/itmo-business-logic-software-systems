@@ -12,8 +12,8 @@ public class Worker {
     private  String name;
 
     @ManyToOne
-    @JoinColumn(name = "id_role")
-    private Role role;
+    @JoinColumn(name = "role_id")
+    private WorkerRole role;
 
     private String phone;
 
@@ -35,11 +35,11 @@ public class Worker {
         this.name = name;
     }
 
-    public Role getRole() {
+    public WorkerRole getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(WorkerRole role) {
         this.role = role;
     }
 

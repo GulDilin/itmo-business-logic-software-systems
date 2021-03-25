@@ -1,9 +1,11 @@
 package guldilin.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
-public class Role {
+public class WorkerRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +14,17 @@ public class Role {
     private String title;
 
     private Integer level;
+
+    @OneToMany(mappedBy = "role_id")
+    private Collection<Worker> workerList = new ArrayList<>();
+
+    public Collection<Worker> getWorkerList() {
+        return workerList;
+    }
+
+    public void setWorkerList(Collection<Worker> workerList) {
+        this.workerList = workerList;
+    }
 
     public Integer getId() {
         return id;
