@@ -1,18 +1,17 @@
-package guldilin.model;
+package guldilin.dto;
 
-import javax.persistence.*;
+import guldilin.model.WorkerRole;
 
-@Entity
-public class Worker {
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class WorkerDTO implements Serializable {
     private Integer id;
 
-    private  String name;
+    @NotNull
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+    @NotNull
     private WorkerRole role;
 
     private String phone;

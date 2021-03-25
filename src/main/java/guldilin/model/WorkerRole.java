@@ -11,11 +11,12 @@ public class WorkerRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String title;
 
     private Integer level;
 
-    @OneToMany(mappedBy = "role_id")
+    @OneToMany(mappedBy = "role_id", fetch = FetchType.LAZY)
     private Collection<Worker> workerList = new ArrayList<>();
 
     public Collection<Worker> getWorkerList() {
