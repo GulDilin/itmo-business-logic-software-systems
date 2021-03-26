@@ -1,5 +1,7 @@
 package guldilin.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -7,10 +9,11 @@ public class WorkerRoleDTO implements Serializable {
 
     private Integer id;
 
-    @NotNull
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
-    @NotNull
+    @NotNull(message = "Level cannot be null")
+    @Min(value = 0, message = "Level should not be less than 0")
     private Integer level;
 
     public Integer getId() {

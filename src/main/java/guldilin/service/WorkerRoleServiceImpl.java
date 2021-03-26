@@ -49,7 +49,14 @@ public class WorkerRoleServiceImpl implements WorkerRoleService {
 
     @Override
     public WorkerRoleDTO create(WorkerRoleDTO workerRoleDTO) {
-        return mapToDTO(workerRoleRepository.save(mapToEntity(workerRoleDTO)));
+        if (workerRoleRepository.findAllByTitle(workerRoleDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException("Role with title already exists");
+        }
+        try {
+            return mapToDTO(workerRoleRepository.save(mapToEntity(workerRoleDTO)));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Couldn't Save to Database");
+        }
     }
 
     private WorkerRoleDTO mapToDTO(WorkerRole workerRole) {
