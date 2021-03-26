@@ -5,11 +5,13 @@ import guldilin.model.WorkerRole;
 import guldilin.repository.WorkerRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class WorkerRoleServiceImpl implements WorkerRoleService {
     private final WorkerRoleRepository workerRoleRepository;
 
