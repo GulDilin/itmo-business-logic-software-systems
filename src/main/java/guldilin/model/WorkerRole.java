@@ -1,6 +1,7 @@
 package guldilin.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,11 +13,13 @@ public class WorkerRole {
     private Integer id;
 
     @Column(unique = true)
+    @NotNull
     private String title;
 
+    @NotNull
     private Integer level;
 
-    @OneToMany(mappedBy = "role_id", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private Collection<Worker> workerList = new ArrayList<>();
 
     public Collection<Worker> getWorkerList() {

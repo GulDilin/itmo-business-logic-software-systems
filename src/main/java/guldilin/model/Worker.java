@@ -12,7 +12,6 @@ public class Worker {
     private  String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
     private WorkerRole role;
 
     private String phone;
