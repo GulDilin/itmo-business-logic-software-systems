@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkerRoleRepository extends JpaRepository<WorkerRole, Long> {
-    Optional<WorkerRole> findByTitle(String title);
+    List<WorkerRole> findAllByTitle(String title);
 
     List<WorkerRole> findAllByLevel(Integer level);
 }
