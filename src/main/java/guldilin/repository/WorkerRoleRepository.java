@@ -6,6 +6,5 @@ import guldilin.model.WorkerRole;
 
 public interface WorkerRoleRepository extends JpaRepository<WorkerRole, Long> {
     List<WorkerRole> findAllByTitle(String title);
-
     List<WorkerRole> findAllByLevel(Integer level);
 }
