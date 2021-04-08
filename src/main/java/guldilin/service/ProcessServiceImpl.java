@@ -2,6 +2,7 @@ package guldilin.service;
 
 import guldilin.dto.ProcessDTO;
 import guldilin.model.Process;
+import guldilin.repository.MedicamentRepository;
 import guldilin.repository.ProcessRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessServiceImpl implements ProcessService {
     private final ProcessRepository processRepository;
+    private final MedicamentRepository medicamentRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProcessServiceImpl(ProcessRepository processRepository, ModelMapper modelMapper) {
+    public ProcessServiceImpl(ProcessRepository processRepository, MedicamentRepository medicamentRepository, ModelMapper modelMapper) {
         this.processRepository = processRepository;
+        this.medicamentRepository = medicamentRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -60,10 +63,15 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     private ProcessDTO mapToDTO(Process process) {
-        return  modelMapper.map(process, ProcessDTO.class);
+        return new ProcessDTO((process));
     }
 
     private Process mapToEntity(ProcessDTO processDTO) {
-        return  modelMapper.map(processDTO, Process.class);
+        Process process = modelMapper.map(processDTO, Process.class);
+        process.setMedicament(
+                medicamentRepository.findById(processDTO.getMedicament())
+                        .orElseThrow(() -> new IllegalArgumentException("No such medicament")));
+        return process;
     }
+
 }

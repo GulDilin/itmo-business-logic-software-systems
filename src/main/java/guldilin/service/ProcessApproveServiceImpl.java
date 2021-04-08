@@ -3,6 +3,8 @@ package guldilin.service;
 import guldilin.dto.ProcessApproveDTO;
 import guldilin.model.ProcessApprove;
 import guldilin.repository.ProcessApproveRepository;
+import guldilin.repository.ProcessRepository;
+import guldilin.repository.WorkerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessApproveServiceImpl implements ProcessApproveService {
     private final ProcessApproveRepository processApproveRepository;
+    private final ProcessRepository processRepository;
+    private final WorkerRepository workerRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProcessApproveServiceImpl(ProcessApproveRepository processApproveRepository, ModelMapper modelMapper) {
+    public ProcessApproveServiceImpl(ProcessApproveRepository processApproveRepository, ProcessRepository processRepository, WorkerRepository workerRepository, ModelMapper modelMapper) {
         this.processApproveRepository = processApproveRepository;
+        this.processRepository = processRepository;
+        this.workerRepository = workerRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -67,10 +73,23 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
     private ProcessApproveDTO mapToDTO(ProcessApprove processApprove) {
-        return modelMapper.map(processApprove, ProcessApproveDTO.class);
+        return new ProcessApproveDTO(processApprove);
     }
 
     private ProcessApprove mapToEntity(ProcessApproveDTO processApproveDTO) {
-        return  modelMapper.map(processApproveDTO, ProcessApprove.class);
+
+        ProcessApprove processApprove = modelMapper.map(processApproveDTO, ProcessApprove.class);
+        processApprove.setProcess(
+                processRepository.findById(processApproveDTO.getProcess())
+                    .orElseThrow(() -> new IllegalArgumentException("No such process")));
+        processApprove.setWorkerBy(
+                workerRepository.findById(processApproveDTO.getWorkerBy())
+                    .orElseThrow(() -> new IllegalArgumentException("No such workerBy")));
+        processApprove.setWorkerTo(
+                workerRepository.findById(processApproveDTO.getWorkerTo())
+                        .orElseThrow(() -> new IllegalArgumentException("No such workerTo")));
+
+        return processApprove;
     }
+
 }

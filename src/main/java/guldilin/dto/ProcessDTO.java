@@ -1,5 +1,7 @@
 package guldilin.dto;
 
+import guldilin.model.Process;
+
 import javax.validation.constraints.NotNull;
 
 public class ProcessDTO {
@@ -9,7 +11,15 @@ public class ProcessDTO {
     @NotNull
     private String status;
 
-    private Integer medicament;
+    private Long medicament;
+
+    ProcessDTO() {}
+
+    public ProcessDTO(Process process) {
+        this.id = process.getId();
+        this.status = process.getStatus();
+        this.medicament = process.getMedicament().getId();
+    }
 
     public Long getId() {
         return id;
@@ -27,11 +37,11 @@ public class ProcessDTO {
         this.status = status;
     }
 
-    public Integer getMedicament() {
+    public Long getMedicament() {
         return medicament;
     }
 
-    public void setMedicament(Integer medicament) {
+    public void setMedicament(Long medicament) {
         this.medicament = medicament;
     }
 }

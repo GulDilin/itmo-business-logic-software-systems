@@ -1,5 +1,7 @@
 package guldilin.dto;
 
+import guldilin.model.Worker;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -10,11 +12,21 @@ public class WorkerDTO implements Serializable {
     private String name;
 
     @NotNull
-    private Integer role;
+    private Long role;
 
     private String phone;
 
     private String email;
+
+    WorkerDTO() {}
+
+    public WorkerDTO(Worker worker) {
+        this.id = worker.getId();
+        this.name = worker.getName();
+        this.role = worker.getRole().getId();
+        this.phone = worker.getPhone();
+        this.email = worker.getEmail();
+    }
 
     public Long getId() {
         return id;
@@ -32,11 +44,11 @@ public class WorkerDTO implements Serializable {
         this.name = name;
     }
 
-    public Integer getRole() {
+    public Long getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Long role) {
         this.role = role;
     }
 

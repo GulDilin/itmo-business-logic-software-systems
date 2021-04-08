@@ -3,6 +3,7 @@ package guldilin.service;
 import guldilin.dto.WorkerDTO;
 import guldilin.model.Worker;
 import guldilin.repository.WorkerRepository;
+import guldilin.repository.WorkerRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class WorkerServiceImpl implements WorkerService {
     private final WorkerRepository workerRepository;
+    private final WorkerRoleRepository workerRoleRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public WorkerServiceImpl(WorkerRepository workerRepository, ModelMapper modelMapper) {
+    public WorkerServiceImpl(WorkerRepository workerRepository, WorkerRoleRepository workerRoleRepository, ModelMapper modelMapper) {
         this.workerRepository = workerRepository;
+        this.workerRoleRepository = workerRoleRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -63,10 +66,15 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     private WorkerDTO mapToDTO(Worker worker) {
-        return  modelMapper.map(worker, WorkerDTO.class);
+        return new WorkerDTO(worker);
     }
 
     private Worker mapToEntity(WorkerDTO workerDTO) {
-        return  modelMapper.map(workerDTO, Worker.class);
+        Worker worker = modelMapper.map(workerDTO, Worker.class);
+        worker.setRole(
+                workerRoleRepository.findById(workerDTO.getRole())
+                    .orElseThrow(() -> new IllegalArgumentException("No such worker role")));
+        return worker;
     }
+
 }

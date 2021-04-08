@@ -7,10 +7,10 @@ public class MedicamentInterractDTO {
     private Long id;
 
     @NotNull
-    private Integer medicament1;
+    private Long medicament1;
 
     @NotNull
-    private Integer medicament2;
+    private Long medicament2;
 
     private String description;
 
@@ -22,19 +22,19 @@ public class MedicamentInterractDTO {
         this.id = id;
     }
 
-    public Integer getMedicament1() {
+    public Long getMedicament1() {
         return medicament1;
     }
 
-    public void setMedicament1(Integer medicament1) {
+    public void setMedicament1(Long medicament1) {
         this.medicament1 = medicament1;
     }
 
-    public Integer getMedicament2() {
+    public Long getMedicament2() {
         return medicament2;
     }
 
-    public void setMedicament2(Integer medicament2) {
+    public void setMedicament2(Long medicament2) {
         this.medicament2 = medicament2;
     }
 

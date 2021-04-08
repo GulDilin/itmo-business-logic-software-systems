@@ -1,5 +1,8 @@
 package guldilin.dto;
 
+import guldilin.model.Process;
+import guldilin.model.ProcessApprove;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -10,19 +13,32 @@ public class ProcessApproveDTO {
     private String level;
 
     @NotNull
-    private Integer workerBy;
+    private Long workerBy;
 
     @NotNull
-    private Integer workerTo;
+    private Long workerTo;
 
     @NotNull
-    private Integer process;
+    private Long process;
 
     private Date created;
 
     private Date updated;
 
     private Boolean approved;
+
+    ProcessApproveDTO() {}
+
+    public ProcessApproveDTO(ProcessApprove processApprove) {
+        this.id = processApprove.getId();
+        this.level = processApprove.getLevel();
+        this.workerBy = processApprove.getWorkerBy().getId();
+        this.workerTo = processApprove.getWorkerTo().getId();
+        this.process = processApprove.getProcess().getId();
+        this.created = processApprove.getCreated();
+        this.updated = processApprove.getUpdated();
+        this.approved = processApprove.getApproved();
+    }
 
     public Long getId() {
         return id;
@@ -40,27 +56,27 @@ public class ProcessApproveDTO {
         this.level = level;
     }
 
-    public Integer getWorkerBy() {
+    public Long getWorkerBy() {
         return workerBy;
     }
 
-    public void setWorkerBy(Integer workerBy) {
+    public void setWorkerBy(Long workerBy) {
         this.workerBy = workerBy;
     }
 
-    public Integer getWorkerTo() {
+    public Long getWorkerTo() {
         return workerTo;
     }
 
-    public void setWorkerTo(Integer workerTo) {
+    public void setWorkerTo(Long workerTo) {
         this.workerTo = workerTo;
     }
 
-    public Integer getProcess() {
+    public Long getProcess() {
         return process;
     }
 
-    public void setProcess(Integer process) {
+    public void setProcess(Long process) {
         this.process = process;
     }
 

@@ -7,7 +7,7 @@ public class MedicamentClassDTO {
 
     private Long id;
 
-    private Integer parentGroup;
+    private Long parentGroup;
 
     @NotNull
     private String title;
@@ -22,11 +22,11 @@ public class MedicamentClassDTO {
         this.id = id;
     }
 
-    public Integer getParentGroup() {
+    public Long getParentGroup() {
         return parentGroup;
     }
 
-    public void setParentGroup(Integer parentGroup) {
+    public void setParentGroup(Long parentGroup) {
         this.parentGroup = parentGroup;
     }
 
