@@ -5,9 +5,9 @@ import guldilin.dto.ProcessDTO;
 import java.util.List;
 
 public interface ProcessService {
-    public List<ProcessDTO> getAll(String status, Long medicamentId);
+    List<ProcessDTO> getAll(String status, Long medicamentId);
 
-    public ProcessDTO get(Integer id);
+    ProcessDTO get(Integer id);
 
-    public ProcessDTO create(ProcessDTO processRoleDTO);
+    ProcessDTO create(ProcessDTO processRoleDTO);
 }

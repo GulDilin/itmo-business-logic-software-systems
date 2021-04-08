@@ -5,9 +5,9 @@ import guldilin.dto.MedicamentInterractDTO;
 import java.util.List;
 
 public interface MedicamentInterractService {
-    public List<MedicamentInterractDTO> getAll(String description);
+    List<MedicamentInterractDTO> getAll(String description);
 
-    public MedicamentInterractDTO get(Integer id);
+    MedicamentInterractDTO get(Integer id);
 
-    public MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO);
+    MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO);
 }

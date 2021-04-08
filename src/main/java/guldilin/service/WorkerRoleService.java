@@ -6,9 +6,9 @@ import guldilin.dto.WorkerRoleDTO;
 
 
 public interface WorkerRoleService {
-    public List<WorkerRoleDTO> getAll(String title, Integer level);
+    List<WorkerRoleDTO> getAll(String title, Integer level);
 
-    public WorkerRoleDTO get(Integer id);
+    WorkerRoleDTO get(Integer id);
 
-    public WorkerRoleDTO create(WorkerRoleDTO workerRoleDTO);
+    WorkerRoleDTO create(WorkerRoleDTO workerRoleDTO);
 }

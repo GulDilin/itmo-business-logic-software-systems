@@ -5,9 +5,9 @@ import guldilin.dto.MedicamentClassDTO;
 import java.util.List;
 
 public interface MedicamentClassService {
-    public List<MedicamentClassDTO> getAll(String title, String description);
+    List<MedicamentClassDTO> getAll(String title, String description);
 
-    public MedicamentClassDTO get(Integer id);
+    MedicamentClassDTO get(Integer id);
 
-    public MedicamentClassDTO create(MedicamentClassDTO medicamentClassDTO);
+    MedicamentClassDTO create(MedicamentClassDTO medicamentClassDTO);
 }
