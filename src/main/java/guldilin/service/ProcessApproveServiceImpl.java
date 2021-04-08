@@ -84,15 +84,7 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         processApproveRepository.findById(processApproveDTO.getId())
                 .orElseThrow( () -> new IllegalArgumentException("No such process approve") );
         processApproveDTO.setUpdated(new Date());
-        try {
-            return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
     }
 
     private ProcessApproveDTO mapToDTO(ProcessApprove processApprove) {

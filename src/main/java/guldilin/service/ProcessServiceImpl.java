@@ -6,7 +6,6 @@ import guldilin.repository.MedicamentRepository;
 import guldilin.repository.ProcessRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,15 +53,7 @@ public class ProcessServiceImpl implements ProcessService {
     @Override
     public ProcessDTO create(ProcessDTO processDTO) {
         processDTO.setId(null);
-        try {
-            return mapToDTO(processRepository.save(mapToEntity(processDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(processRepository.save(mapToEntity(processDTO)));
     }
 
     private ProcessDTO mapToDTO(Process process) {

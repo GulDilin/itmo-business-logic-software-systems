@@ -5,7 +5,6 @@ import guldilin.model.Producer;
 import guldilin.repository.ProducerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class ProducerServiceImpl implements ProducerService {
             workerList = producerRepository.findAllByAddress(address);
         } else if (contact != null) {
             workerList = producerRepository.findAllByContact(contact);
-        } else{
+        } else {
             workerList = producerRepository.findAll();
         }
         return workerList.stream()
@@ -42,7 +41,8 @@ public class ProducerServiceImpl implements ProducerService {
     }
 
 
-    @Override public ProducerDTO get(Integer id) {
+    @Override
+    public ProducerDTO get(Integer id) {
         Optional<Producer> found = producerRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
@@ -55,22 +55,14 @@ public class ProducerServiceImpl implements ProducerService {
         if (producerRepository.findAllByTitle(producerDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException(" with name already exists");
         }
-        try {
-            return mapToDTO(producerRepository.save(mapToEntity(producerDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(producerRepository.save(mapToEntity(producerDTO)));
     }
 
     private ProducerDTO mapToDTO(Producer producer) {
-        return  modelMapper.map(producer, ProducerDTO.class);
+        return modelMapper.map(producer, ProducerDTO.class);
     }
 
     private Producer mapToEntity(ProducerDTO producerDTO) {
-        return  modelMapper.map(producerDTO, Producer.class);
+        return modelMapper.map(producerDTO, Producer.class);
     }
 }

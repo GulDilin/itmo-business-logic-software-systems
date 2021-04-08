@@ -5,7 +5,6 @@ import guldilin.model.ActiveSubstance;
 import guldilin.repository.ActiveSubstanceRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,15 +54,7 @@ public class ActiveSubstanceServiceImpl implements ActiveSubstanceService {
         if (activeSubstanceRepository.findAllByTitle(activeSubstanceDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Active substance with such title already exists");
         }
-        try {
-            return mapToDTO(activeSubstanceRepository.save(mapToEntity(activeSubstanceDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(activeSubstanceRepository.save(mapToEntity(activeSubstanceDTO)));
     }
 
     private ActiveSubstanceDTO mapToDTO(ActiveSubstance activeSubstance) {

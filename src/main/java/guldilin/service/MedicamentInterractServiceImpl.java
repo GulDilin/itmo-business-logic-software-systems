@@ -6,7 +6,6 @@ import guldilin.repository.MedicamentInterractRepository;
 import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
     public List<MedicamentInterractDTO> getAll(String description) {
         List<MedicamentInterract> MedicamentInterractList;
 
-       if (description != null) {
+        if (description != null) {
             MedicamentInterractList = medicamentInterractRepository.findAllByDescription(description);
         } else {
             MedicamentInterractList = medicamentInterractRepository.findAll();
@@ -52,15 +51,7 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
     @Override
     public MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO) {
         medicamentInterractDTO.setId(null);
-        try {
-            return mapToDTO(medicamentInterractRepository.save(mapToEntity(medicamentInterractDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(medicamentInterractRepository.save(mapToEntity(medicamentInterractDTO)));
     }
 
     private MedicamentInterractDTO mapToDTO(MedicamentInterract medicamentInterract) {

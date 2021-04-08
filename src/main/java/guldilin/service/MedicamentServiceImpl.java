@@ -8,7 +8,6 @@ import guldilin.repository.MedicamentGroupRepository;
 import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,15 +66,7 @@ public class MedicamentServiceImpl implements MedicamentService {
         if (medicamentRepository.findAllByTitle(medicamentDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Medicament with title already exists");
         }
-        try {
-            return mapToDTO(medicamentRepository.save(mapToEntity(medicamentDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+        return mapToDTO(medicamentRepository.save(mapToEntity(medicamentDTO)));
     }
 
     private MedicamentDTO mapToDTO(Medicament medicament) {

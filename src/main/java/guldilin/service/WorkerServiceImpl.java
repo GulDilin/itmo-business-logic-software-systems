@@ -6,7 +6,6 @@ import guldilin.repository.WorkerRepository;
 import guldilin.repository.WorkerRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class WorkerServiceImpl implements WorkerService {
             workerList = workerRepository.findAllByRoleId(workerRoleId);
         } else if (email != null) {
             workerList = workerRepository.findAllByEmail(email);
-        } else{
+        } else {
             workerList = workerRepository.findAll();
         }
         return workerList.stream()
@@ -45,7 +44,8 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
 
-    @Override public WorkerDTO get(Integer id) {
+    @Override
+    public WorkerDTO get(Integer id) {
         Optional<Worker> found = workerRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
@@ -58,15 +58,8 @@ public class WorkerServiceImpl implements WorkerService {
         if (workerRepository.findAllByName(workerDTO.getName()).size() > 0) {
             throw new IllegalArgumentException("Worker with name already exists");
         }
-        try {
-            return mapToDTO(workerRepository.save(mapToEntity(workerDTO)));
-        } catch (IllegalArgumentException exp) {
-            throw exp;
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Cannot save to database");
-        }
+
+        return mapToDTO(workerRepository.save(mapToEntity(workerDTO)));
     }
 
     private WorkerDTO mapToDTO(Worker worker) {
