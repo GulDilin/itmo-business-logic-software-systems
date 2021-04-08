@@ -32,9 +32,9 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         if (level != null) {
             ProcessApproveList = ProcessApproveRepository.findAllByLevel(level);
         } else if (ProcessApproveBy != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByIdWorkerBy(ProcessApproveBy);
+            ProcessApproveList = ProcessApproveRepository.findAllByWorkerById(ProcessApproveBy);
         } else if (ProcessApproveTo != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByIdWorkerBy(ProcessApproveTo);
+            ProcessApproveList = ProcessApproveRepository.findAllByWorkerToId(ProcessApproveTo);
         } else if (create != null) {
             ProcessApproveList = ProcessApproveRepository.findAllByCreated(create);
         } else if (update != null) {
