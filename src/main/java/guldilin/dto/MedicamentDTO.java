@@ -2,13 +2,13 @@ package guldilin.dto;
 
 import guldilin.model.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class MedicamentDTO {
 
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
     private Long group;

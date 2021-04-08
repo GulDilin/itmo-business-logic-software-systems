@@ -2,13 +2,13 @@ package guldilin.dto;
 
 import guldilin.model.Process;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class ProcessDTO {
 
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Status cannot be blank")
     private String status;
 
     private Long medicament;

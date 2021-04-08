@@ -2,16 +2,17 @@ package guldilin.dto;
 
 import guldilin.model.Worker;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class WorkerDTO implements Serializable {
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Role cannot be null")
     private Long role;
 
     private String phone;

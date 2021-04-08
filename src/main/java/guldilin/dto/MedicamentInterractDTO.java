@@ -1,5 +1,6 @@
 package guldilin.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class MedicamentInterractDTO {
@@ -12,6 +13,7 @@ public class MedicamentInterractDTO {
     @NotNull
     private Long medicament2;
 
+    @NotBlank(message = "Description cannot be blank")
     private String description;
 
     public Long getId() {

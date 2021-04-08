@@ -1,14 +1,11 @@
 package guldilin.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class ActiveSubstanceDTO {
-
     private Long id;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
     private String description;

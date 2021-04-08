@@ -1,9 +1,12 @@
 package guldilin.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class ProducerDTO {
 
     private Long id;
 
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
     private String address;
