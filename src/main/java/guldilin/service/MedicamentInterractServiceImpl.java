@@ -2,6 +2,7 @@ package guldilin.service;
 
 import guldilin.dto.MedicamentInterractDTO;
 import guldilin.model.MedicamentInterract;
+import guldilin.repository.MedicamentInterractRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicamentInterractServiceImpl implements MedicamentInterractService {
-    private final guldilin.repository.MedicamentInterractRepository MedicamentInterractRepository;
+    private final MedicamentInterractRepository medicamentInterractRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public MedicamentInterractServiceImpl(guldilin.repository.MedicamentInterractRepository MedicamentInterractRepository) {
-        this.MedicamentInterractRepository = MedicamentInterractRepository;
+    public MedicamentInterractServiceImpl(MedicamentInterractRepository medicamentInterractRepository) {
+        this.medicamentInterractRepository = medicamentInterractRepository;
     }
 
     @Override
@@ -27,9 +28,9 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
         List<MedicamentInterract> MedicamentInterractList;
 
        if (description != null) {
-            MedicamentInterractList = MedicamentInterractRepository.findAllByDescription(description);
+            MedicamentInterractList = medicamentInterractRepository.findAllByDescription(description);
         } else {
-            MedicamentInterractList = MedicamentInterractRepository.findAll();
+            MedicamentInterractList = medicamentInterractRepository.findAll();
         }
         return MedicamentInterractList.stream()
                 .map(this::mapToDTO)
@@ -38,7 +39,7 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
 
     @Override
     public MedicamentInterractDTO get(Integer id) {
-        Optional<MedicamentInterract> found = MedicamentInterractRepository.findById(Long.valueOf(id));
+        Optional<MedicamentInterract> found = medicamentInterractRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -47,11 +48,11 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
 
     @Override
     public MedicamentInterractDTO create(MedicamentInterractDTO MedicamentInterractDTO) {
-        if (MedicamentInterractRepository.findAllById(MedicamentInterractDTO.getId()).size() > 0) {
+        if (medicamentInterractRepository.findAllById(MedicamentInterractDTO.getId()).size() > 0) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {
-            return mapToDTO(MedicamentInterractRepository.save(mapToEntity(MedicamentInterractDTO)));
+            return mapToDTO(medicamentInterractRepository.save(mapToEntity(MedicamentInterractDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }

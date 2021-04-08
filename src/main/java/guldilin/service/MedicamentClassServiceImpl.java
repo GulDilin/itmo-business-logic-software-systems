@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicamentClassServiceImpl implements MedicamentClassService {
-    private final MedicamentClassRepository MedicamentClassRepository;
+    private final MedicamentClassRepository medicamentClassRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public MedicamentClassServiceImpl(MedicamentClassRepository MedicamentClassRepository) {
-        this.MedicamentClassRepository = MedicamentClassRepository;
+    public MedicamentClassServiceImpl(MedicamentClassRepository medicamentClassRepository, ModelMapper modelMapper) {
+        this.medicamentClassRepository = medicamentClassRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
         List<MedicamentClass> MedicamentClassList;
 
         if (title != null) {
-            MedicamentClassList = MedicamentClassRepository.findAllByTitle(title);
+            MedicamentClassList = medicamentClassRepository.findAllByTitle(title);
         } else if (description != null) {
-            MedicamentClassList = MedicamentClassRepository.findAllByDescription(description);
+            MedicamentClassList = medicamentClassRepository.findAllByDescription(description);
         } else {
-            MedicamentClassList = MedicamentClassRepository.findAll();
+            MedicamentClassList = medicamentClassRepository.findAll();
         }
         return MedicamentClassList.stream()
                 .map(this::mapToDTO)
@@ -40,7 +40,7 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
 
     @Override
     public MedicamentClassDTO get(Integer id) {
-        Optional<MedicamentClass> found = MedicamentClassRepository.findById(Long.valueOf(id));
+        Optional<MedicamentClass> found = medicamentClassRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -49,11 +49,11 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
 
     @Override
     public MedicamentClassDTO create(MedicamentClassDTO MedicamentClassDTO) {
-        if (MedicamentClassRepository.findAllByTitle(MedicamentClassDTO.getTitle()).size() > 0) {
+        if (medicamentClassRepository.findAllByTitle(MedicamentClassDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {
-            return mapToDTO(MedicamentClassRepository.save(mapToEntity(MedicamentClassDTO)));
+            return mapToDTO(medicamentClassRepository.save(mapToEntity(MedicamentClassDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }

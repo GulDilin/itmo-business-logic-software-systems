@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicamentGroupServiceImpl implements MedicamentGroupService {
-    private final guldilin.repository.MedicamentGroupRepository MedicamentGroupRepository;
+    private final MedicamentGroupRepository medicamentGroupRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public MedicamentGroupServiceImpl(guldilin.repository.MedicamentGroupRepository MedicamentGroupRepository) {
-        this.MedicamentGroupRepository = MedicamentGroupRepository;
+    public MedicamentGroupServiceImpl(MedicamentGroupRepository medicamentGroupRepository, ModelMapper modelMapper) {
+        this.medicamentGroupRepository = medicamentGroupRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class MedicamentGroupServiceImpl implements MedicamentGroupService {
         List<MedicamentGroup> MedicamentGroupList;
 
         if (title != null) {
-            MedicamentGroupList = MedicamentGroupRepository.findAllByTitle(title);
+            MedicamentGroupList = medicamentGroupRepository.findAllByTitle(title);
         } else if (description != null) {
-            MedicamentGroupList = MedicamentGroupRepository.findAllByDescription(description);
+            MedicamentGroupList = medicamentGroupRepository.findAllByDescription(description);
         } else {
-            MedicamentGroupList = MedicamentGroupRepository.findAll();
+            MedicamentGroupList = medicamentGroupRepository.findAll();
         }
         return MedicamentGroupList.stream()
                 .map(this::mapToDTO)
@@ -40,7 +40,7 @@ public class MedicamentGroupServiceImpl implements MedicamentGroupService {
 
     @Override
     public MedicamentGroupDTO get(Integer id) {
-        Optional<MedicamentGroup> found = MedicamentGroupRepository.findById(Long.valueOf(id));
+        Optional<MedicamentGroup> found = medicamentGroupRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -49,21 +49,21 @@ public class MedicamentGroupServiceImpl implements MedicamentGroupService {
 
     @Override
     public MedicamentGroupDTO create(MedicamentGroupDTO MedicamentGroupDTO) {
-        if (MedicamentGroupRepository.findAllByTitle(MedicamentGroupDTO.getTitle()).size() > 0) {
+        if (medicamentGroupRepository.findAllByTitle(MedicamentGroupDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {
-            return mapToDTO(MedicamentGroupRepository.save(mapToEntity(MedicamentGroupDTO)));
+            return mapToDTO(medicamentGroupRepository.save(mapToEntity(MedicamentGroupDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }
     }
 
     private MedicamentGroupDTO mapToDTO(MedicamentGroup MedicamentGroup) {
-        return  modelMapper.map(MedicamentGroup, MedicamentGroupDTO.class);
+        return modelMapper.map(MedicamentGroup, MedicamentGroupDTO.class);
     }
 
     private MedicamentGroup mapToEntity(MedicamentGroupDTO MedicamentGroupDTO) {
-        return  modelMapper.map(MedicamentGroupDTO, MedicamentGroup.class);
+        return modelMapper.map(MedicamentGroupDTO, MedicamentGroup.class);
     }
 }

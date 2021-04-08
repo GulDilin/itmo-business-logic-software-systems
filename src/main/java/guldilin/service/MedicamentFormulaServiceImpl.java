@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
-    private final guldilin.repository.MedicamentFormulaRepository MedicamentFormulaRepository;
+    private final MedicamentFormulaRepository medicamentFormulaRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public MedicamentFormulaServiceImpl(MedicamentFormulaRepository MedicamentFormulaRepository) {
-        this.MedicamentFormulaRepository = MedicamentFormulaRepository;
+    public MedicamentFormulaServiceImpl(MedicamentFormulaRepository medicamentFormulaRepository, ModelMapper modelMapper) {
+        this.medicamentFormulaRepository = medicamentFormulaRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
         List<MedicamentFormula> MedicamentFormulaList;
 
         if (title != null) {
-            MedicamentFormulaList = MedicamentFormulaRepository.findAllByTitle(title);
+            MedicamentFormulaList = medicamentFormulaRepository.findAllByTitle(title);
         } else if (description != null) {
-            MedicamentFormulaList = MedicamentFormulaRepository.findAllByDescription(description);
+            MedicamentFormulaList = medicamentFormulaRepository.findAllByDescription(description);
         } else {
-            MedicamentFormulaList = MedicamentFormulaRepository.findAll();
+            MedicamentFormulaList = medicamentFormulaRepository.findAll();
         }
         return MedicamentFormulaList.stream()
                 .map(this::mapToDTO)
@@ -40,7 +40,7 @@ public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
 
     @Override
     public MedicamentFormulaDTO get(Integer id) {
-        Optional<MedicamentFormula> found = MedicamentFormulaRepository.findById(Long.valueOf(id));
+        Optional<MedicamentFormula> found = medicamentFormulaRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -49,11 +49,11 @@ public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
 
     @Override
     public MedicamentFormulaDTO create(MedicamentFormulaDTO MedicamentFormulaDTO) {
-        if (MedicamentFormulaRepository.findAllByTitle(MedicamentFormulaDTO.getTitle()).size() > 0) {
+        if (medicamentFormulaRepository.findAllByTitle(MedicamentFormulaDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {
-            return mapToDTO(MedicamentFormulaRepository.save(mapToEntity(MedicamentFormulaDTO)));
+            return mapToDTO(medicamentFormulaRepository.save(mapToEntity(MedicamentFormulaDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }

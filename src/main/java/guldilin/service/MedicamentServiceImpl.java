@@ -2,6 +2,7 @@ package guldilin.service;
 
 import guldilin.dto.MedicamentDTO;
 import guldilin.model.Medicament;
+import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicamentServiceImpl implements MedicamentService {
-    private final guldilin.repository.MedicamentRepository MedicamentRepository;
+    private final MedicamentRepository medicamentRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public MedicamentServiceImpl(guldilin.repository.MedicamentRepository MedicamentRepository) {
-        this.MedicamentRepository = MedicamentRepository;
+    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, ModelMapper modelMapper) {
+        this.medicamentRepository = medicamentRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -27,15 +28,15 @@ public class MedicamentServiceImpl implements MedicamentService {
         List<Medicament> MedicamentList;
 
         if (title != null) {
-            MedicamentList = MedicamentRepository.findAllByTitle(title);
+            MedicamentList = medicamentRepository.findAllByTitle(title);
         }  else if (groupId != null) {
-            MedicamentList = MedicamentRepository.findAllByGroupId(groupId);
+            MedicamentList = medicamentRepository.findAllByGroupId(groupId);
         }  else if (formulaId != null) {
-            MedicamentList = MedicamentRepository.findAllByFormulaId(formulaId);
+            MedicamentList = medicamentRepository.findAllByFormulaId(formulaId);
         }  else if (activeSubstanceId != null) {
-            MedicamentList = MedicamentRepository.findAllByActiveSubstancesId(activeSubstanceId);
+            MedicamentList = medicamentRepository.findAllByActiveSubstancesId(activeSubstanceId);
         } else {
-            MedicamentList = MedicamentRepository.findAll();
+            MedicamentList = medicamentRepository.findAll();
         }
         return MedicamentList.stream()
                 .map(this::mapToDTO)
@@ -44,7 +45,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public MedicamentDTO get(Integer id) {
-        Optional<Medicament> found = MedicamentRepository.findById(Long.valueOf(id));
+        Optional<Medicament> found = medicamentRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -53,11 +54,11 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public MedicamentDTO create(MedicamentDTO MedicamentDTO) {
-        if (MedicamentRepository.findAllByTitle(MedicamentDTO.getTitle()).size() > 0) {
+        if (medicamentRepository.findAllByTitle(MedicamentDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {
-            return mapToDTO(MedicamentRepository.save(mapToEntity(MedicamentDTO)));
+            return mapToDTO(medicamentRepository.save(mapToEntity(MedicamentDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }
