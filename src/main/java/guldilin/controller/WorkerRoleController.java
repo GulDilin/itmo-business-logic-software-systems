@@ -3,11 +3,8 @@ package guldilin.controller;
 import guldilin.dto.WorkerRoleDTO;
 import guldilin.service.WorkerRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class WorkerRoleController {
+public class WorkerRoleController implements ValidationExceptionHandler {
 
     private final WorkerRoleService workerRoleService;
 
@@ -36,6 +33,15 @@ public class WorkerRoleController {
         }
     }
 
+    @GetMapping("/api/roles/{id}")
+    public ResponseEntity getRole(Integer id) {
+        try {
+            return ResponseEntity.ok(workerRoleService.get(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping(
             path = "/api/roles",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -51,18 +57,5 @@ public class WorkerRoleController {
             }};
             return ResponseEntity.badRequest().body(errorMap);
         }
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 }
