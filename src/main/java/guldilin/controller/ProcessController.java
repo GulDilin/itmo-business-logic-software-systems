@@ -34,7 +34,7 @@ public class ProcessController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/process/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ProcessService.get(id));
         } catch (IllegalArgumentException e) {

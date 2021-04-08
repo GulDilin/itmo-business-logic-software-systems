@@ -33,7 +33,7 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/substances/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ActiveSubstanceService.get(id));
         } catch (IllegalArgumentException e) {

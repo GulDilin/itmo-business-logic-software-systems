@@ -34,7 +34,7 @@ public class MedicamentFormulaController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/formulas/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(MedicamentFormulaService.get(id));
         } catch (IllegalArgumentException e) {

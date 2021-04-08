@@ -36,7 +36,7 @@ public class MedicamentController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/medicaments/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(MedicamentService.get(id));
         } catch (IllegalArgumentException e) {

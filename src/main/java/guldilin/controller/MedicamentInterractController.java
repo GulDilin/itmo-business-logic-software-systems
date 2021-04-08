@@ -33,7 +33,7 @@ public class MedicamentInterractController implements ValidationExceptionHandler
     }
 
     @GetMapping("/api/interracts/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(MedicamentInterractService.get(id));
         } catch (IllegalArgumentException e) {

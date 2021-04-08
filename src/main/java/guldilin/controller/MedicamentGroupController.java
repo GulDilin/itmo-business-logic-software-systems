@@ -34,7 +34,7 @@ public class MedicamentGroupController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/groups/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(MedicamentGroupService.get(id));
         } catch (IllegalArgumentException e) {

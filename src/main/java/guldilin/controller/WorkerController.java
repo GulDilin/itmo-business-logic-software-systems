@@ -36,7 +36,7 @@ public class WorkerController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/workers/{id}")
-    public ResponseEntity get(Integer id) {
+    public ResponseEntity get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(workerService.get(id));
         } catch (IllegalArgumentException e) {

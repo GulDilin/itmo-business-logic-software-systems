@@ -34,7 +34,7 @@ public class WorkerRoleController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/roles/{id}")
-    public ResponseEntity getRole(Integer id) {
+    public ResponseEntity getRole(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(workerRoleService.get(id));
         } catch (IllegalArgumentException e) {
