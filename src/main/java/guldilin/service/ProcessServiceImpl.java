@@ -6,6 +6,7 @@ import guldilin.repository.MedicamentRepository;
 import guldilin.repository.ProcessRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,18 +48,20 @@ public class ProcessServiceImpl implements ProcessService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such process");
     }
 
     @Override
-    public ProcessDTO create(ProcessDTO ProcessDTO) {
-        if (processRepository.findById(ProcessDTO.getId()).isPresent()) {
-            throw new IllegalArgumentException("Role with title already exists");
-        }
+    public ProcessDTO create(ProcessDTO processDTO) {
+        processDTO.setId(null);
         try {
-            return mapToDTO(processRepository.save(mapToEntity(ProcessDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(processRepository.save(mapToEntity(processDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -68,9 +71,11 @@ public class ProcessServiceImpl implements ProcessService {
 
     private Process mapToEntity(ProcessDTO processDTO) {
         Process process = modelMapper.map(processDTO, Process.class);
-        process.setMedicament(
-                medicamentRepository.findById(processDTO.getMedicament())
-                        .orElseThrow(() -> new IllegalArgumentException("No such medicament")));
+        if (processDTO.getMedicament() != null) {
+            process.setMedicament(
+                    medicamentRepository.findById(processDTO.getMedicament())
+                            .orElseThrow(() -> new IllegalArgumentException("No such medicament")));
+        }
         return process;
     }
 

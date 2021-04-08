@@ -1,12 +1,11 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentClassDTO;
-import guldilin.dto.MedicamentInterractDTO;
 import guldilin.model.MedicamentClass;
-import guldilin.model.MedicamentInterract;
 import guldilin.repository.MedicamentClassRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,18 +45,23 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such medicament class");
     }
 
     @Override
-    public MedicamentClassDTO create(MedicamentClassDTO MedicamentClassDTO) {
-        if (medicamentClassRepository.findAllByTitle(MedicamentClassDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Role with title already exists");
+    public MedicamentClassDTO create(MedicamentClassDTO medicamentClassDTO) {
+        medicamentClassDTO.setId(null);
+        if (medicamentClassRepository.findAllByTitle(medicamentClassDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException("Medicament class with title already exists");
         }
         try {
-            return mapToDTO(medicamentClassRepository.save(mapToEntity(MedicamentClassDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(medicamentClassRepository.save(mapToEntity(medicamentClassDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -67,9 +71,11 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
 
     private MedicamentClass mapToEntity(MedicamentClassDTO medicamentClassDTO) {
         MedicamentClass medicamentClass = modelMapper.map(medicamentClassDTO, MedicamentClass.class);
-        medicamentClass.setParentClass(
-                medicamentClassRepository.findById(medicamentClassDTO.getParentClass())
-                        .orElseThrow(() -> new IllegalArgumentException("No such worker parent class")));
+        if (medicamentClassDTO.getParentClass() != null) {
+            medicamentClass.setParentClass(
+                    medicamentClassRepository.findById(medicamentClassDTO.getParentClass())
+                            .orElseThrow(() -> new IllegalArgumentException("No such worker parent class")));
+        }
 
 
         return medicamentClass;

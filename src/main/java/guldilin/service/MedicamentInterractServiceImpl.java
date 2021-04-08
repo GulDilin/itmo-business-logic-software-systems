@@ -1,19 +1,17 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentInterractDTO;
-import guldilin.dto.WorkerDTO;
 import guldilin.model.MedicamentInterract;
-import guldilin.model.Worker;
 import guldilin.repository.MedicamentInterractRepository;
 import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 public class MedicamentInterractServiceImpl implements MedicamentInterractService {
@@ -48,18 +46,20 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such medicament interaction");
     }
 
     @Override
-    public MedicamentInterractDTO create(MedicamentInterractDTO MedicamentInterractDTO) {
-        if (medicamentInterractRepository.findById(MedicamentInterractDTO.getId()).isPresent()) {
-            throw new IllegalArgumentException("Role with title already exists");
-        }
+    public MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO) {
+        medicamentInterractDTO.setId(null);
         try {
-            return mapToDTO(medicamentInterractRepository.save(mapToEntity(MedicamentInterractDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(medicamentInterractRepository.save(mapToEntity(medicamentInterractDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -69,12 +69,16 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
 
     private MedicamentInterract mapToEntity(MedicamentInterractDTO medicamentInterractDTO) {
         MedicamentInterract medicamentInterract = modelMapper.map(medicamentInterractDTO, MedicamentInterract.class);
-        medicamentInterract.setMedicament1(
-                medicamentRepository.findById(medicamentInterractDTO.getMedicament1())
-                    .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 1")));
-        medicamentInterract.setMedicament2(
-                medicamentRepository.findById(medicamentInterractDTO.getMedicament2())
-                        .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 2")));
+        if (medicamentInterractDTO.getMedicament1() != null) {
+            medicamentInterract.setMedicament1(
+                    medicamentRepository.findById(medicamentInterractDTO.getMedicament1())
+                            .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 1")));
+        }
+        if (medicamentInterractDTO.getMedicament2() != null) {
+            medicamentInterract.setMedicament2(
+                    medicamentRepository.findById(medicamentInterractDTO.getMedicament2())
+                            .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 2")));
+        }
 
         return medicamentInterract;
     }

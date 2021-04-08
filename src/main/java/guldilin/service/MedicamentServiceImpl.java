@@ -8,12 +8,12 @@ import guldilin.repository.MedicamentGroupRepository;
 import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 public class MedicamentServiceImpl implements MedicamentService {
@@ -58,18 +58,23 @@ public class MedicamentServiceImpl implements MedicamentService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such medicament");
     }
 
     @Override
-    public MedicamentDTO create(MedicamentDTO MedicamentDTO) {
-        if (medicamentRepository.findAllByTitle(MedicamentDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Role with title already exists");
+    public MedicamentDTO create(MedicamentDTO medicamentDTO) {
+        medicamentDTO.setId(null);
+        if (medicamentRepository.findAllByTitle(medicamentDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException("Medicament with title already exists");
         }
         try {
-            return mapToDTO(medicamentRepository.save(mapToEntity(MedicamentDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(medicamentRepository.save(mapToEntity(medicamentDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -79,15 +84,21 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
         Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
-        medicament.setFormula(
-                medicamentFormulaRepository.findById(medicamentDTO.getFormula())
-                        .orElseThrow(() -> new IllegalArgumentException("No such formula")));
-        medicament.setGroup(
-                medicamentGroupRepository.findById(medicamentDTO.getGroup())
-                        .orElseThrow(() -> new IllegalArgumentException("No such medical group")));
-        medicament.setMedicamentClass(
-                medicamentClassRepository.findById(medicamentDTO.getMedicamentClass())
-                        .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
+        if (medicamentDTO.getFormula() != null) {
+            medicament.setFormula(
+                    medicamentFormulaRepository.findById(medicamentDTO.getFormula())
+                            .orElseThrow(() -> new IllegalArgumentException("No such formula")));
+        }
+        if (medicamentDTO.getGroup() != null) {
+            medicament.setGroup(
+                    medicamentGroupRepository.findById(medicamentDTO.getGroup())
+                            .orElseThrow(() -> new IllegalArgumentException("No such medical group")));
+        }
+        if (medicamentDTO.getMedicamentClass() != null) {
+            medicament.setMedicamentClass(
+                    medicamentClassRepository.findById(medicamentDTO.getMedicamentClass())
+                            .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
+        }
         return medicament;
     }
 }

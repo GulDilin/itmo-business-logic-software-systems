@@ -5,6 +5,7 @@ import guldilin.model.WorkerRole;
 import guldilin.repository.WorkerRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,8 +55,12 @@ public class WorkerRoleServiceImpl implements WorkerRoleService {
         }
         try {
             return mapToDTO(workerRoleRepository.save(mapToEntity(workerRoleDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 

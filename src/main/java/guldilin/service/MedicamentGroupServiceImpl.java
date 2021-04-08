@@ -5,6 +5,7 @@ import guldilin.model.MedicamentGroup;
 import guldilin.repository.MedicamentGroupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,18 +45,23 @@ public class MedicamentGroupServiceImpl implements MedicamentGroupService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such group");
     }
 
     @Override
-    public MedicamentGroupDTO create(MedicamentGroupDTO MedicamentGroupDTO) {
-        if (medicamentGroupRepository.findAllByTitle(MedicamentGroupDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Role with title already exists");
+    public MedicamentGroupDTO create(MedicamentGroupDTO medicamentGroupDTO) {
+        medicamentGroupDTO.setId(null);
+        if (medicamentGroupRepository.findAllByTitle(medicamentGroupDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException("Group with title already exists");
         }
         try {
-            return mapToDTO(medicamentGroupRepository.save(mapToEntity(MedicamentGroupDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(medicamentGroupRepository.save(mapToEntity(medicamentGroupDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 

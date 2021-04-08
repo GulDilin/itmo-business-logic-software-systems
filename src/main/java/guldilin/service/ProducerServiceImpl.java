@@ -5,12 +5,12 @@ import guldilin.model.Producer;
 import guldilin.repository.ProducerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 public class ProducerServiceImpl implements ProducerService {
@@ -47,18 +47,22 @@ public class ProducerServiceImpl implements ProducerService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such ");
+        throw new IllegalArgumentException("No such producer");
     }
 
     @Override
-    public ProducerDTO create(ProducerDTO workerDTO) {
-        if (producerRepository.findAllByTitle(workerDTO.getTitle()).size() > 0) {
+    public ProducerDTO create(ProducerDTO producerDTO) {
+        if (producerRepository.findAllByTitle(producerDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException(" with name already exists");
         }
         try {
-            return mapToDTO(producerRepository.save(mapToEntity(workerDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(producerRepository.save(mapToEntity(producerDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 

@@ -7,6 +7,7 @@ import guldilin.repository.ProcessRepository;
 import guldilin.repository.WorkerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -57,18 +58,20 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such ");
+        throw new IllegalArgumentException("No such process approve");
     }
 
     @Override
-    public ProcessApproveDTO create(ProcessApproveDTO ProcessApproveDTO) {
-        if (processApproveRepository.findById(ProcessApproveDTO.getId()).isPresent()) {
-            throw new IllegalArgumentException(" with name already exists");
-        }
+    public ProcessApproveDTO create(ProcessApproveDTO processApproveDTO) {
+        processApproveDTO.setId(null);
         try {
-            return mapToDTO(processApproveRepository.save(mapToEntity(ProcessApproveDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -79,15 +82,21 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     private ProcessApprove mapToEntity(ProcessApproveDTO processApproveDTO) {
 
         ProcessApprove processApprove = modelMapper.map(processApproveDTO, ProcessApprove.class);
-        processApprove.setProcess(
-                processRepository.findById(processApproveDTO.getProcess())
-                    .orElseThrow(() -> new IllegalArgumentException("No such process")));
-        processApprove.setWorkerBy(
-                workerRepository.findById(processApproveDTO.getWorkerBy())
-                    .orElseThrow(() -> new IllegalArgumentException("No such workerBy")));
-        processApprove.setWorkerTo(
-                workerRepository.findById(processApproveDTO.getWorkerTo())
-                        .orElseThrow(() -> new IllegalArgumentException("No such workerTo")));
+        if (processApproveDTO.getProcess() != null) {
+            processApprove.setProcess(
+                    processRepository.findById(processApproveDTO.getProcess())
+                            .orElseThrow(() -> new IllegalArgumentException("No such process")));
+        }
+        if (processApproveDTO.getWorkerBy() != null) {
+            processApprove.setWorkerBy(
+                    workerRepository.findById(processApproveDTO.getWorkerBy())
+                            .orElseThrow(() -> new IllegalArgumentException("No such workerBy")));
+        }
+        if (processApproveDTO.getWorkerTo() != null) {
+            processApprove.setWorkerTo(
+                    workerRepository.findById(processApproveDTO.getWorkerTo())
+                            .orElseThrow(() -> new IllegalArgumentException("No such workerTo")));
+        }
 
         return processApprove;
     }

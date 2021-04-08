@@ -5,6 +5,7 @@ import guldilin.model.MedicamentFormula;
 import guldilin.repository.MedicamentFormulaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,26 +45,31 @@ public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such role");
+        throw new IllegalArgumentException("No such formula");
     }
 
     @Override
-    public MedicamentFormulaDTO create(MedicamentFormulaDTO MedicamentFormulaDTO) {
-        if (medicamentFormulaRepository.findAllByTitle(MedicamentFormulaDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Role with title already exists");
+    public MedicamentFormulaDTO create(MedicamentFormulaDTO medicamentFormulaDTO) {
+        medicamentFormulaDTO.setId(null);
+        if (medicamentFormulaRepository.findAllByTitle(medicamentFormulaDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException("Formula with title already exists");
         }
         try {
-            return mapToDTO(medicamentFormulaRepository.save(mapToEntity(MedicamentFormulaDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+            return mapToDTO(medicamentFormulaRepository.save(mapToEntity(medicamentFormulaDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
     private MedicamentFormulaDTO mapToDTO(MedicamentFormula medicamentFormula) {
-        return  modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
+        return modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
     }
 
     private MedicamentFormula mapToEntity(MedicamentFormulaDTO medicamentFormulaDTO) {
-        return  modelMapper.map(medicamentFormulaDTO, MedicamentFormula.class);
+        return modelMapper.map(medicamentFormulaDTO, MedicamentFormula.class);
     }
 }

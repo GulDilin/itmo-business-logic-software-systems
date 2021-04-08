@@ -6,12 +6,12 @@ import guldilin.repository.WorkerRepository;
 import guldilin.repository.WorkerRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 public class WorkerServiceImpl implements WorkerService {
@@ -50,18 +50,22 @@ public class WorkerServiceImpl implements WorkerService {
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such ");
+        throw new IllegalArgumentException("No such worker");
     }
 
     @Override
     public WorkerDTO create(WorkerDTO workerDTO) {
         if (workerRepository.findAllByName(workerDTO.getName()).size() > 0) {
-            throw new IllegalArgumentException(" with name already exists");
+            throw new IllegalArgumentException("Worker with name already exists");
         }
         try {
             return mapToDTO(workerRepository.save(mapToEntity(workerDTO)));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't Save to Database");
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
         }
     }
 
@@ -71,9 +75,11 @@ public class WorkerServiceImpl implements WorkerService {
 
     private Worker mapToEntity(WorkerDTO workerDTO) {
         Worker worker = modelMapper.map(workerDTO, Worker.class);
-        worker.setRole(
-                workerRoleRepository.findById(workerDTO.getRole())
-                    .orElseThrow(() -> new IllegalArgumentException("No such worker role")));
+        if (workerDTO.getRole() != null) {
+            worker.setRole(
+                    workerRoleRepository.findById(workerDTO.getRole())
+                            .orElseThrow(() -> new IllegalArgumentException("No such worker role")));
+        }
         return worker;
     }
 
