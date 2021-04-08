@@ -1,6 +1,5 @@
 package guldilin.dto;
 
-import guldilin.model.Process;
 import guldilin.model.ProcessApprove;
 
 import javax.validation.constraints.NotNull;

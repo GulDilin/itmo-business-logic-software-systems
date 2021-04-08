@@ -15,6 +15,8 @@ public class MedicamentClassDTO {
 
     private String description;
 
+    public MedicamentClassDTO() {}
+
     public MedicamentClassDTO(MedicamentClass medicamentClass) {
         this.id = medicamentClass.getId();
         this.parentClass = medicamentClass.getParentClass().getId();

@@ -18,6 +18,8 @@ public class MedicamentInterractDTO {
     @NotBlank(message = "Description cannot be blank")
     private String description;
 
+    public MedicamentInterractDTO() {}
+
     public MedicamentInterractDTO(MedicamentInterract medicamentInterract) {
         this.id = medicamentInterract.getId();
         this.medicament1 = medicamentInterract.getMedicament1().getId();
