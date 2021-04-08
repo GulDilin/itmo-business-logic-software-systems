@@ -9,41 +9,32 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 public class ProcessApproveController implements ValidationExceptionHandler {
 
-    private final ProcessApproveService ProcessApproveService;
+    private final ProcessApproveService processApproveService;
 
     @Autowired
     public ProcessApproveController(guldilin.service.ProcessApproveService ProcessApproveService) {
-        this.ProcessApproveService = ProcessApproveService;
+        this.processApproveService = ProcessApproveService;
     }
 
     @GetMapping("/api/approve")
-    public ResponseEntity<Object> gets(
+    public ResponseEntity<List<ProcessApproveDTO>> gets(
             @RequestParam(required = false) String level,
             @RequestParam(required = false) Long workerBy,
             @RequestParam(required = false) Long workerTo,
             @RequestParam(required = false) Date create,
             @RequestParam(required = false) Date update
     ) {
-        try {
-            return ResponseEntity.ok(ProcessApproveService.getAll( level, workerBy, workerTo, create, update ));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(processApproveService.getAll(level, workerBy, workerTo, create, update));
     }
 
     @GetMapping("/api/approve/{id}")
-    public ResponseEntity<Object> get(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(ProcessApproveService.get(id));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ProcessApproveDTO> get(@PathVariable Integer id) {
+        return ResponseEntity.ok(processApproveService.get(id));
     }
 
     @PostMapping(
@@ -52,14 +43,17 @@ public class ProcessApproveController implements ValidationExceptionHandler {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO ProcessApproveDTO) {
-        try {
-            return ResponseEntity.ok(ProcessApproveService.create(ProcessApproveDTO));
-        } catch (IllegalArgumentException e) {
-            Map<String, String> errorMap  = new HashMap<String, String>() {{
-                put("error", "Bad request");
-                put("message", e.getMessage());
-            }};
-            return ResponseEntity.badRequest().body(errorMap);
-        }
+        return ResponseEntity.ok(processApproveService.create(ProcessApproveDTO));
+
+    }
+
+    @PostMapping(
+            path = "/api/approve/{id}/approve",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> approve(@PathVariable Integer id) {
+        ProcessApproveDTO processApproveDTO = processApproveService.get(id);
+        processApproveDTO.setApproved(true);
+        return ResponseEntity.ok(processApproveService.update(processApproveDTO));
     }
 }

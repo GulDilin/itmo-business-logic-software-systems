@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -28,20 +26,12 @@ public class MedicamentController implements ValidationExceptionHandler {
             @RequestParam(required = false) Long formulaId,
             @RequestParam(required = false) Long activeSubstanceId
     ) {
-        try {
-            return ResponseEntity.ok(MedicamentService.getAll( title,  groupId, formulaId, activeSubstanceId ));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(MedicamentService.getAll(title, groupId, formulaId, activeSubstanceId));
     }
 
     @GetMapping("/api/medicaments/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(MedicamentService.get(id));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(MedicamentService.get(id));
     }
 
     @PostMapping(
@@ -50,14 +40,6 @@ public class MedicamentController implements ValidationExceptionHandler {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Object> create(@RequestBody @Valid MedicamentDTO MedicamentDTO) {
-        try {
-            return ResponseEntity.ok(MedicamentService.create(MedicamentDTO));
-        } catch (IllegalArgumentException e) {
-            Map<String, String> errorMap  = new HashMap<String, String>() {{
-                put("error", "Bad request");
-                put("message", e.getMessage());
-            }};
-            return ResponseEntity.badRequest().body(errorMap);
-        }
+        return ResponseEntity.ok(MedicamentService.create(MedicamentDTO));
     }
 }

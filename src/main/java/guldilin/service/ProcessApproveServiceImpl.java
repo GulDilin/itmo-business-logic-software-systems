@@ -53,7 +53,8 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
 
-    @Override public ProcessApproveDTO get(Integer id) {
+    @Override
+    public ProcessApproveDTO get(Integer id) {
         Optional<ProcessApprove> found = processApproveRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
@@ -64,6 +65,25 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     @Override
     public ProcessApproveDTO create(ProcessApproveDTO processApproveDTO) {
         processApproveDTO.setId(null);
+        Date now = new Date();
+        processApproveDTO.setCreated(now);
+        processApproveDTO.setUpdated(now);
+        try {
+            return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
+        } catch (IllegalArgumentException exp) {
+            throw exp;
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Cannot save to database");
+        }
+    }
+
+    @Override
+    public ProcessApproveDTO update(ProcessApproveDTO processApproveDTO) {
+        processApproveRepository.findById(processApproveDTO.getId())
+                .orElseThrow( () -> new IllegalArgumentException("No such process approve") );
+        processApproveDTO.setUpdated(new Date());
         try {
             return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
         } catch (IllegalArgumentException exp) {

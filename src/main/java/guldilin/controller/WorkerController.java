@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -28,20 +26,12 @@ public class WorkerController implements ValidationExceptionHandler {
             @RequestParam(required = false) Long workerRole,
             @RequestParam(required = false) String email
     ) {
-        try {
-            return ResponseEntity.ok(workerService.getAll( name,  workerRole,  email));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(workerService.getAll(name, workerRole, email));
     }
 
     @GetMapping("/api/workers/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(workerService.get(id));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(workerService.get(id));
     }
 
     @PostMapping(
@@ -50,14 +40,6 @@ public class WorkerController implements ValidationExceptionHandler {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Object> create(@RequestBody @Valid WorkerDTO workerDTO) {
-        try {
-            return ResponseEntity.ok(workerService.create(workerDTO));
-        } catch (IllegalArgumentException e) {
-            Map<String, String> errorMap  = new HashMap<String, String>() {{
-                put("error", "Bad request");
-                put("message", e.getMessage());
-            }};
-            return ResponseEntity.badRequest().body(errorMap);
-        }
+        return ResponseEntity.ok(workerService.create(workerDTO));
     }
 }
