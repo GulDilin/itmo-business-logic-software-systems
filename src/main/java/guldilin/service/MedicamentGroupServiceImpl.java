@@ -59,11 +59,11 @@ public class MedicamentGroupServiceImpl implements MedicamentGroupService {
         }
     }
 
-    private MedicamentGroupDTO mapToDTO(MedicamentGroup MedicamentGroup) {
-        return modelMapper.map(MedicamentGroup, MedicamentGroupDTO.class);
+    private MedicamentGroupDTO mapToDTO(MedicamentGroup medicamentGroup) {
+        return modelMapper.map(medicamentGroup, MedicamentGroupDTO.class);
     }
 
-    private MedicamentGroup mapToEntity(MedicamentGroupDTO MedicamentGroupDTO) {
-        return modelMapper.map(MedicamentGroupDTO, MedicamentGroup.class);
+    private MedicamentGroup mapToEntity(MedicamentGroupDTO medicamentGroupDTO) {
+        return modelMapper.map(medicamentGroupDTO, MedicamentGroup.class);
     }
 }

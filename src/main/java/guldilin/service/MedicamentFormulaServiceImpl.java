@@ -59,11 +59,11 @@ public class MedicamentFormulaServiceImpl implements MedicamentFormulaService {
         }
     }
 
-    private MedicamentFormulaDTO mapToDTO(MedicamentFormula MedicamentFormula) {
-        return  modelMapper.map(MedicamentFormula, MedicamentFormulaDTO.class);
+    private MedicamentFormulaDTO mapToDTO(MedicamentFormula medicamentFormula) {
+        return  modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
     }
 
-    private MedicamentFormula mapToEntity(MedicamentFormulaDTO MedicamentFormulaDTO) {
-        return  modelMapper.map(MedicamentFormulaDTO, MedicamentFormula.class);
+    private MedicamentFormula mapToEntity(MedicamentFormulaDTO medicamentFormulaDTO) {
+        return  modelMapper.map(medicamentFormulaDTO, MedicamentFormula.class);
     }
 }

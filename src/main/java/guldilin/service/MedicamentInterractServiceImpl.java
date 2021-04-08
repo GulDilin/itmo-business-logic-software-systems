@@ -1,8 +1,11 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentInterractDTO;
+import guldilin.dto.WorkerDTO;
 import guldilin.model.MedicamentInterract;
+import guldilin.model.Worker;
 import guldilin.repository.MedicamentInterractRepository;
+import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +18,14 @@ import java.util.stream.Collectors;
 @Service
 public class MedicamentInterractServiceImpl implements MedicamentInterractService {
     private final MedicamentInterractRepository medicamentInterractRepository;
+    private final MedicamentRepository medicamentRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public MedicamentInterractServiceImpl(MedicamentInterractRepository medicamentInterractRepository) {
+    public MedicamentInterractServiceImpl(MedicamentInterractRepository medicamentInterractRepository, MedicamentRepository medicamentRepository) {
         this.medicamentInterractRepository = medicamentInterractRepository;
+        this.medicamentRepository = medicamentRepository;
     }
 
     @Override
@@ -58,11 +63,19 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
         }
     }
 
-    private MedicamentInterractDTO mapToDTO(MedicamentInterract MedicamentInterract) {
-        return  modelMapper.map(MedicamentInterract, MedicamentInterractDTO.class);
+    private MedicamentInterractDTO mapToDTO(MedicamentInterract medicamentInterract) {
+        return new MedicamentInterractDTO(medicamentInterract);
     }
 
-    private MedicamentInterract mapToEntity(MedicamentInterractDTO MedicamentInterractDTO) {
-        return  modelMapper.map(MedicamentInterractDTO, MedicamentInterract.class);
+    private MedicamentInterract mapToEntity(MedicamentInterractDTO medicamentInterractDTO) {
+        MedicamentInterract medicamentInterract = modelMapper.map(medicamentInterractDTO, MedicamentInterract.class);
+        medicamentInterract.setMedicament1(
+                medicamentRepository.findById(medicamentInterractDTO.getMedicament1())
+                    .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 1")));
+        medicamentInterract.setMedicament2(
+                medicamentRepository.findById(medicamentInterractDTO.getMedicament2())
+                        .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 2")));
+
+        return medicamentInterract;
     }
 }

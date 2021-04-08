@@ -1,7 +1,9 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentClassDTO;
+import guldilin.dto.MedicamentInterractDTO;
 import guldilin.model.MedicamentClass;
+import guldilin.model.MedicamentInterract;
 import guldilin.repository.MedicamentClassRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,17 @@ public class MedicamentClassServiceImpl implements MedicamentClassService {
         }
     }
 
-    private MedicamentClassDTO mapToDTO(MedicamentClass MedicamentClass) {
-        return  modelMapper.map(MedicamentClass, MedicamentClassDTO.class);
+    private MedicamentClassDTO mapToDTO(MedicamentClass medicamentClass) {
+        return new MedicamentClassDTO(medicamentClass);
     }
 
-    private MedicamentClass mapToEntity(MedicamentClassDTO MedicamentClassDTO) {
-        return  modelMapper.map(MedicamentClassDTO, MedicamentClass.class);
+    private MedicamentClass mapToEntity(MedicamentClassDTO medicamentClassDTO) {
+        MedicamentClass medicamentClass = modelMapper.map(medicamentClassDTO, MedicamentClass.class);
+        medicamentClass.setParentClass(
+                medicamentClassRepository.findById(medicamentClassDTO.getParentClass())
+                        .orElseThrow(() -> new IllegalArgumentException("No such worker parent class")));
+
+
+        return medicamentClass;
     }
 }

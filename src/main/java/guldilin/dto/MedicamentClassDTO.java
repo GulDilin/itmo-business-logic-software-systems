@@ -1,18 +1,26 @@
 package guldilin.dto;
 
+import guldilin.model.MedicamentClass;
+
 import javax.validation.constraints.NotNull;
 
 public class MedicamentClassDTO {
 
-
     private Long id;
 
-    private Long parentGroup;
+    private Long parentClass;
 
     @NotNull
     private String title;
 
     private String description;
+
+    public MedicamentClassDTO(MedicamentClass medicamentClass) {
+        this.id = medicamentClass.getId();
+        this.parentClass = medicamentClass.getParentClass().getId();
+        this.title = medicamentClass.getTitle();
+        this.description = medicamentClass.getDescription();
+    }
 
     public Long getId() {
         return id;
@@ -22,12 +30,12 @@ public class MedicamentClassDTO {
         this.id = id;
     }
 
-    public Long getParentGroup() {
-        return parentGroup;
+    public Long getParentClass() {
+        return parentClass;
     }
 
-    public void setParentGroup(Long parentGroup) {
-        this.parentGroup = parentGroup;
+    public void setParentClass(Long parentGroup) {
+        this.parentClass = parentGroup;
     }
 
     public String getTitle() {

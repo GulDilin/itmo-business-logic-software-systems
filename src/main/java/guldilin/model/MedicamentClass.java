@@ -12,7 +12,7 @@ public class MedicamentClass {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MedicamentGroup parentGroup;
+    private MedicamentClass parentClass;
 
     private String title;
 
@@ -29,12 +29,12 @@ public class MedicamentClass {
         this.id = id;
     }
 
-    public MedicamentGroup getParentGroup() {
-        return parentGroup;
+    public MedicamentClass getParentClass() {
+        return parentClass;
     }
 
-    public void setParentGroup(MedicamentGroup parentGroup) {
-        this.parentGroup = parentGroup;
+    public void setParentClass(MedicamentClass parentClass) {
+        this.parentClass = parentClass;
     }
 
     public String getTitle() {
