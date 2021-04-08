@@ -11,7 +11,7 @@ public class ProcessDTO {
     @NotNull
     private String status;
 
-    private Medicament medicament;
+    private Integer medicament;
 
     public Integer getId() {
         return id;
@@ -29,11 +29,11 @@ public class ProcessDTO {
         this.status = status;
     }
 
-    public Medicament getMedicament() {
+    public Integer getMedicament() {
         return medicament;
     }
 
-    public void setMedicament(Medicament medicament) {
+    public void setMedicament(Integer medicament) {
         this.medicament = medicament;
     }
 }

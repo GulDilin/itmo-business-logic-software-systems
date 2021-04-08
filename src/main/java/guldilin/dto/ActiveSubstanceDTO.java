@@ -1,6 +1,7 @@
 package guldilin.dto;
 
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class ActiveSubstanceDTO {
@@ -8,6 +9,7 @@ public class ActiveSubstanceDTO {
     private Integer id;
 
     @NotNull
+    @NotBlank
     private String title;
 
     private String description;

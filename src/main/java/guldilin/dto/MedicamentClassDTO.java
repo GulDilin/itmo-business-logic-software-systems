@@ -9,7 +9,7 @@ public class MedicamentClassDTO {
 
     private Integer id;
 
-    private MedicamentGroup parentGroup;
+    private Integer parentGroup;
 
     @NotNull
     private String title;
@@ -24,11 +24,11 @@ public class MedicamentClassDTO {
         this.id = id;
     }
 
-    public MedicamentGroup getParentGroup() {
+    public Integer getParentGroup() {
         return parentGroup;
     }
 
-    public void setParentGroup(MedicamentGroup parentGroup) {
+    public void setParentGroup(Integer parentGroup) {
         this.parentGroup = parentGroup;
     }
 

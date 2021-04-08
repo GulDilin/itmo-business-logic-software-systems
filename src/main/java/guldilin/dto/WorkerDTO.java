@@ -12,7 +12,7 @@ public class WorkerDTO implements Serializable {
     private String name;
 
     @NotNull
-    private WorkerRole role;
+    private Integer role;
 
     private String phone;
 
@@ -34,11 +34,11 @@ public class WorkerDTO implements Serializable {
         this.name = name;
     }
 
-    public WorkerRole getRole() {
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(WorkerRole role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
 

@@ -12,11 +12,11 @@ public class MedicamentDTO {
     @NotNull
     private String title;
 
-    private MedicamentGroup group;
+    private Integer group;
 
-    private MedicamentFormula formula;
+    private Integer formula;
 
-    private MedicamentClass medicamentClass;
+    private Integer medicamentClass;
 
     public Integer getId() {
         return id;
@@ -34,27 +34,27 @@ public class MedicamentDTO {
         this.title = title;
     }
 
-    public MedicamentGroup getGroup() {
+    public Integer getGroup() {
         return group;
     }
 
-    public void setGroup(MedicamentGroup group) {
+    public void setGroup(Integer group) {
         this.group = group;
     }
 
-    public MedicamentFormula getFormula() {
+    public Integer getFormula() {
         return formula;
     }
 
-    public void setFormula(MedicamentFormula formula) {
+    public void setFormula(Integer formula) {
         this.formula = formula;
     }
 
-    public MedicamentClass getMedicamentClass() {
+    public Integer getMedicamentClass() {
         return medicamentClass;
     }
 
-    public void setMedicamentClass(MedicamentClass medicamentClass) {
+    public void setMedicamentClass(Integer medicamentClass) {
         this.medicamentClass = medicamentClass;
     }
 }

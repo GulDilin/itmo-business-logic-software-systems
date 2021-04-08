@@ -14,13 +14,13 @@ public class ProcessApproveDTO {
     private String level;
 
     @NotNull
-    private Worker workerBy;
+    private Integer workerBy;
 
     @NotNull
-    private Worker workerTo;
+    private Integer workerTo;
 
     @NotNull
-    private Process process;
+    private Integer process;
 
     private Date created;
 
@@ -44,27 +44,27 @@ public class ProcessApproveDTO {
         this.level = level;
     }
 
-    public Worker getWorkerBy() {
+    public Integer getWorkerBy() {
         return workerBy;
     }
 
-    public void setWorkerBy(Worker workerBy) {
+    public void setWorkerBy(Integer workerBy) {
         this.workerBy = workerBy;
     }
 
-    public Worker getWorkerTo() {
+    public Integer getWorkerTo() {
         return workerTo;
     }
 
-    public void setWorkerTo(Worker workerTo) {
+    public void setWorkerTo(Integer workerTo) {
         this.workerTo = workerTo;
     }
 
-    public Process getProcess() {
+    public Integer getProcess() {
         return process;
     }
 
-    public void setProcess(Process process) {
+    public void setProcess(Integer process) {
         this.process = process;
     }
 

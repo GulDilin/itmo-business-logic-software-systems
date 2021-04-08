@@ -9,10 +9,10 @@ public class MedicamentInterractDTO {
     private Integer id;
 
     @NotNull
-    private Medicament medicament1;
+    private Integer medicament1;
 
     @NotNull
-    private Medicament medicament2;
+    private Integer medicament2;
 
     private String description;
 
@@ -24,19 +24,19 @@ public class MedicamentInterractDTO {
         this.id = id;
     }
 
-    public Medicament getMedicament1() {
+    public Integer getMedicament1() {
         return medicament1;
     }
 
-    public void setMedicament1(Medicament medicament1) {
+    public void setMedicament1(Integer medicament1) {
         this.medicament1 = medicament1;
     }
 
-    public Medicament getMedicament2() {
+    public Integer getMedicament2() {
         return medicament2;
     }
 
-    public void setMedicament2(Medicament medicament2) {
+    public void setMedicament2(Integer medicament2) {
         this.medicament2 = medicament2;
     }
 
