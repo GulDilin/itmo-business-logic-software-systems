@@ -15,9 +15,6 @@ public class MedicamentFormula {
 
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Medicament medicament;
-
     public Integer getId() {
         return id;
     }
@@ -48,13 +45,5 @@ public class MedicamentFormula {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Medicament getMedicament() {
-        return medicament;
-    }
-
-    public void setMedicament(Medicament medicament) {
-        this.medicament = medicament;
     }
 }

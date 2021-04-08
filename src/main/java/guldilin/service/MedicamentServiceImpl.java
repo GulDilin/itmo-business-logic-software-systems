@@ -2,6 +2,9 @@ package guldilin.service;
 
 import guldilin.dto.MedicamentDTO;
 import guldilin.model.Medicament;
+import guldilin.repository.MedicamentClassRepository;
+import guldilin.repository.MedicamentFormulaRepository;
+import guldilin.repository.MedicamentGroupRepository;
 import guldilin.repository.MedicamentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class MedicamentServiceImpl implements MedicamentService {
     private final MedicamentRepository medicamentRepository;
+    private final MedicamentFormulaRepository medicamentFormulaRepository;
+    private final MedicamentGroupRepository medicamentGroupRepository;
+    private final MedicamentClassRepository medicamentClassRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, ModelMapper modelMapper) {
+    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, MedicamentFormulaRepository medicamentFormulaRepository, MedicamentGroupRepository medicamentGroupRepository, MedicamentClassRepository medicamentClassRepository, ModelMapper modelMapper) {
         this.medicamentRepository = medicamentRepository;
+        this.medicamentFormulaRepository = medicamentFormulaRepository;
+        this.medicamentGroupRepository = medicamentGroupRepository;
+        this.medicamentClassRepository = medicamentClassRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -64,11 +73,15 @@ public class MedicamentServiceImpl implements MedicamentService {
         }
     }
 
-    private MedicamentDTO mapToDTO(Medicament Medicament) {
-        return  modelMapper.map(Medicament, MedicamentDTO.class);
+    private MedicamentDTO mapToDTO(Medicament medicament) {
+        return new MedicamentDTO(medicament);
     }
 
-    private Medicament mapToEntity(MedicamentDTO MedicamentDTO) {
-        return  modelMapper.map(MedicamentDTO, Medicament.class);
+    private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
+        Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
+        medicament.setFormula(medicamentFormulaRepository.findById(medicamentDTO.getFormula()));
+        medicament.setGroup(medicamentGroupRepository.findById(medicamentDTO.getGroup()));
+        medicament.setMedicamentClass(medicamentClassRepository.findById(medicamentDTO.getMedicamentClass()));
+        return medicament;
     }
 }
