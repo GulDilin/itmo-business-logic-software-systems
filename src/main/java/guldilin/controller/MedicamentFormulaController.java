@@ -22,7 +22,7 @@ public class MedicamentFormulaController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/formulas")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String description
     ) {
@@ -34,7 +34,7 @@ public class MedicamentFormulaController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/formulas/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(MedicamentFormulaService.get(id));
         } catch (IllegalArgumentException e) {
@@ -47,7 +47,7 @@ public class MedicamentFormulaController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid MedicamentFormulaDTO MedicamentFormulaDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentFormulaDTO MedicamentFormulaDTO) {
         try {
             return ResponseEntity.ok(MedicamentFormulaService.create(MedicamentFormulaDTO));
         } catch (IllegalArgumentException e) {

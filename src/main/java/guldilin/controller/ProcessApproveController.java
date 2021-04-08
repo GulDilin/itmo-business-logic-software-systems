@@ -23,7 +23,7 @@ public class ProcessApproveController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/approve")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String level,
             @RequestParam(required = false) Long workerBy,
             @RequestParam(required = false) Long workerTo,
@@ -38,7 +38,7 @@ public class ProcessApproveController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/approve/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ProcessApproveService.get(id));
         } catch (IllegalArgumentException e) {
@@ -51,7 +51,7 @@ public class ProcessApproveController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid ProcessApproveDTO ProcessApproveDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO ProcessApproveDTO) {
         try {
             return ResponseEntity.ok(ProcessApproveService.create(ProcessApproveDTO));
         } catch (IllegalArgumentException e) {

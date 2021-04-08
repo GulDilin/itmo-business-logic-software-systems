@@ -21,7 +21,7 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/substances")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String description
     ) {
@@ -33,7 +33,7 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/substances/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ActiveSubstanceService.get(id));
         } catch (IllegalArgumentException e) {
@@ -46,7 +46,7 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid ActiveSubstanceDTO ActiveSubstanceDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid ActiveSubstanceDTO ActiveSubstanceDTO) {
         try {
             return ResponseEntity.ok(ActiveSubstanceService.create(ActiveSubstanceDTO));
         } catch (IllegalArgumentException e) {

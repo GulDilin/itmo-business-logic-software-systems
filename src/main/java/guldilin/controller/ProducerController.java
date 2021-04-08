@@ -22,7 +22,7 @@ public class ProducerController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/producers")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String contact
@@ -35,7 +35,7 @@ public class ProducerController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/producers/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ProducerService.get(id));
         } catch (IllegalArgumentException e) {
@@ -48,7 +48,7 @@ public class ProducerController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid ProducerDTO ProducerDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid ProducerDTO ProducerDTO) {
         try {
             return ResponseEntity.ok(ProducerService.create(ProducerDTO));
         } catch (IllegalArgumentException e) {

@@ -23,7 +23,7 @@ public class WorkerController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/workers")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long workerRole,
             @RequestParam(required = false) String email
@@ -36,7 +36,7 @@ public class WorkerController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/workers/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(workerService.get(id));
         } catch (IllegalArgumentException e) {
@@ -49,7 +49,7 @@ public class WorkerController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid WorkerDTO workerDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid WorkerDTO workerDTO) {
         try {
             return ResponseEntity.ok(workerService.create(workerDTO));
         } catch (IllegalArgumentException e) {

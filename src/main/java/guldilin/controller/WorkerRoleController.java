@@ -22,7 +22,7 @@ public class WorkerRoleController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/roles")
-    public ResponseEntity getRoles(
+    public ResponseEntity<Object> getRoles(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer level
     ) {
@@ -34,7 +34,7 @@ public class WorkerRoleController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/roles/{id}")
-    public ResponseEntity getRole(@PathVariable Integer id) {
+    public ResponseEntity<Object> getRole(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(workerRoleService.get(id));
         } catch (IllegalArgumentException e) {
@@ -47,7 +47,7 @@ public class WorkerRoleController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity createRole(@RequestBody @Valid WorkerRoleDTO workerRoleDTO) {
+    public ResponseEntity<Object> createRole(@RequestBody @Valid WorkerRoleDTO workerRoleDTO) {
         try {
             return ResponseEntity.ok(workerRoleService.create(workerRoleDTO));
         } catch (IllegalArgumentException e) {

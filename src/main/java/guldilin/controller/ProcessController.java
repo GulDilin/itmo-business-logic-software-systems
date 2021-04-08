@@ -22,7 +22,7 @@ public class ProcessController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/process")
-    public ResponseEntity gets(
+    public ResponseEntity<Object> gets(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) Long medicamentId
     ) {
@@ -34,7 +34,7 @@ public class ProcessController implements ValidationExceptionHandler {
     }
 
     @GetMapping("/api/process/{id}")
-    public ResponseEntity get(@PathVariable Integer id) {
+    public ResponseEntity<Object> get(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(ProcessService.get(id));
         } catch (IllegalArgumentException e) {
@@ -47,7 +47,7 @@ public class ProcessController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity create(@RequestBody @Valid ProcessDTO ProcessDTO) {
+    public ResponseEntity<Object> create(@RequestBody @Valid ProcessDTO ProcessDTO) {
         try {
             return ResponseEntity.ok(ProcessService.create(ProcessDTO));
         } catch (IllegalArgumentException e) {
