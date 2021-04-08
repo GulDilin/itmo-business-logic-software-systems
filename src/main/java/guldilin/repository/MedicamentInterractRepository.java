@@ -10,5 +10,6 @@ import java.util.List;
 public interface MedicamentInterractRepository extends JpaRepository<MedicamentInterract, Long> {
     List<MedicamentInterract> findAllByDescription(String description);
     List<MedicamentInterract> findAllById(Integer id);
+    MedicamentInterract findById(Integer id);
 
 }

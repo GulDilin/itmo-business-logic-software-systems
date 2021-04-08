@@ -9,6 +9,8 @@ import java.util.List;
 public interface MedicamentGroupRepository extends JpaRepository<MedicamentGroup, Long> {
     List<MedicamentGroup> findAllByTitle(String title);
     List<MedicamentGroup> findAllByDescription(String description);
+    List<MedicamentGroup> findAllById(Integer id);
+    MedicamentGroup findById(Integer id);
 
 
 }

@@ -12,4 +12,5 @@ public interface ProcessRepository extends JpaRepository<Process, Long> {
     List<Process> findAllByMedicament(Medicament medicament);
     List<Process> findAllByMedicamentId(Long medicamentId);
     List<Process> findAllById(Integer id);
+    Process findById(Integer id);
 }

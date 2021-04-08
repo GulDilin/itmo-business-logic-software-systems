@@ -13,5 +13,8 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
     List<Medicament> findAllByFormulaId (Long formulaId);
     List<Medicament> findAllByGroup (MedicamentGroup group);
     List<Medicament> findAllByGroupId (Long groupId);
+    List<Medicament> findAllById(Integer id);
+    Medicament findById(Integer id);
+
 
 }
