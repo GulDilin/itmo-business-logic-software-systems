@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 public class ProcessApproveController implements ValidationExceptionHandler {
 
-    private final guldilin.service.ProcessApproveService ProcessApproveService;
+    private final ProcessApproveService ProcessApproveService;
 
     @Autowired
     public ProcessApproveController(guldilin.service.ProcessApproveService ProcessApproveService) {
