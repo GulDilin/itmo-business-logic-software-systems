@@ -2,7 +2,7 @@ package guldilin.dto;
 
 import guldilin.model.MedicamentClass;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class MedicamentClassDTO {
 
@@ -10,7 +10,7 @@ public class MedicamentClassDTO {
 
     private Long parentClass;
 
-    @NotNull
+    @NotBlank(message = "Title cannot be null")
     private String title;
 
     private String description;

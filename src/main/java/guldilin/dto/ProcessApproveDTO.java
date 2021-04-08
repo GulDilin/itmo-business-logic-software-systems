@@ -2,7 +2,7 @@ package guldilin.dto;
 
 import guldilin.model.ProcessApprove;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -10,8 +10,9 @@ public class ProcessApproveDTO {
 
     private Long id;
 
-    @NotBlank(message = "workerBy cannot be blank")
-    private String level;
+    @NotNull(message = "workerBy cannot be null")
+    @Min(value = 1)
+    private Integer level;
 
     @NotNull(message = "workerBy cannot be null")
     private Long workerBy;
@@ -55,11 +56,11 @@ public class ProcessApproveDTO {
         this.id = id;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

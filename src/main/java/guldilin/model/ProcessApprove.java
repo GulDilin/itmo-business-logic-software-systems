@@ -10,7 +10,7 @@ public class ProcessApprove {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String level;
+    private Integer level;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Worker workerBy;
@@ -35,11 +35,11 @@ public class ProcessApprove {
         this.id = id;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
