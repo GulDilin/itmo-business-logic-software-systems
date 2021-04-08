@@ -22,8 +22,12 @@ public class MedicamentInterractDTO {
 
     public MedicamentInterractDTO(MedicamentInterract medicamentInterract) {
         this.id = medicamentInterract.getId();
-        this.medicament1 = medicamentInterract.getMedicament1().getId();
-        this.medicament2 = medicamentInterract.getMedicament2().getId();
+        if (medicamentInterract.getMedicament1() != null) {
+            this.medicament1 = medicamentInterract.getMedicament1().getId();
+        }
+        if (medicamentInterract.getMedicament2() != null) {
+            this.medicament2 = medicamentInterract.getMedicament2().getId();
+        }
         this.description = medicamentInterract.getDescription();
     }
 

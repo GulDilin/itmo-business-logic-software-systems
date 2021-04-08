@@ -24,7 +24,9 @@ public class WorkerDTO implements Serializable {
     public WorkerDTO(Worker worker) {
         this.id = worker.getId();
         this.name = worker.getName();
-        this.role = worker.getRole().getId();
+        if (worker.getRole() != null) {
+            this.role = worker.getRole().getId();
+        }
         this.phone = worker.getPhone();
         this.email = worker.getEmail();
     }

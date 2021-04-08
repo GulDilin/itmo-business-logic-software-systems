@@ -22,9 +22,15 @@ public class MedicamentDTO {
     public MedicamentDTO(Medicament medicament) {
         this.id = medicament.getId();
         this.title = medicament.getTitle();
-        this.group = medicament.getGroup().getId();
-        this.formula = medicament.getFormula().getId();
-        this.medicamentClass = medicament.getMedicamentClass().getId();
+        if (medicament.getGroup() != null){
+            this.group = medicament.getGroup().getId();
+        }
+        if (medicament.getFormula() != null) {
+            this.formula = medicament.getFormula().getId();
+        }
+        if (medicament.getMedicamentClass() != null) {
+            this.medicamentClass = medicament.getMedicamentClass().getId();
+        }
     }
 
     public Long getId() {

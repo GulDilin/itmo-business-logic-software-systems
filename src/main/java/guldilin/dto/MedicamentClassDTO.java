@@ -15,11 +15,14 @@ public class MedicamentClassDTO {
 
     private String description;
 
-    public MedicamentClassDTO() {}
+    public MedicamentClassDTO() {
+    }
 
     public MedicamentClassDTO(MedicamentClass medicamentClass) {
         this.id = medicamentClass.getId();
-        this.parentClass = medicamentClass.getParentClass().getId();
+        if (medicamentClass.getParentClass() != null) {
+            this.parentClass = medicamentClass.getParentClass().getId();
+        }
         this.title = medicamentClass.getTitle();
         this.description = medicamentClass.getDescription();
     }

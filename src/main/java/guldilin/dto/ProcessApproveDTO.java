@@ -2,6 +2,7 @@ package guldilin.dto;
 
 import guldilin.model.ProcessApprove;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -9,15 +10,16 @@ public class ProcessApproveDTO {
 
     private Long id;
 
+    @NotBlank(message = "workerBy cannot be blank")
     private String level;
 
-    @NotNull
+    @NotNull(message = "workerBy cannot be null")
     private Long workerBy;
 
-    @NotNull
+    @NotNull(message = "workerTo cannot be null")
     private Long workerTo;
 
-    @NotNull
+    @NotNull(message = "process cannot be null")
     private Long process;
 
     private Date created;
@@ -31,9 +33,15 @@ public class ProcessApproveDTO {
     public ProcessApproveDTO(ProcessApprove processApprove) {
         this.id = processApprove.getId();
         this.level = processApprove.getLevel();
-        this.workerBy = processApprove.getWorkerBy().getId();
-        this.workerTo = processApprove.getWorkerTo().getId();
-        this.process = processApprove.getProcess().getId();
+        if (processApprove.getWorkerBy() != null) {
+            this.workerBy = processApprove.getWorkerBy().getId();
+        }
+        if (processApprove.getWorkerTo() != null) {
+            this.workerTo = processApprove.getWorkerTo().getId();
+        }
+        if (processApprove.getProcess() != null) {
+            this.process = processApprove.getProcess().getId();
+        }
         this.created = processApprove.getCreated();
         this.updated = processApprove.getUpdated();
         this.approved = processApprove.getApproved();

@@ -18,7 +18,9 @@ public class ProcessDTO {
     public ProcessDTO(Process process) {
         this.id = process.getId();
         this.status = process.getStatus();
-        this.medicament = process.getMedicament().getId();
+        if (process.getMedicament() != null) {
+            this.medicament = process.getMedicament().getId();
+        }
     }
 
     public Long getId() {
