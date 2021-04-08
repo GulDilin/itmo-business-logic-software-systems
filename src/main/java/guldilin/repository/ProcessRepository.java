@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProcessRepository extends JpaRepository<Process, Long> {
     List<Process> findAllByStatus(String status);
     List<Process> findAllByMedicament(Medicament medicament);
+    List<Process> findAllByMedicamentId(Long medicamentId);
+    List<Process> findAllById(Integer id);
 }

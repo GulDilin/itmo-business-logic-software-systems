@@ -1,0 +1,72 @@
+package guldilin.service;
+
+import guldilin.dto.ProducerDTO;
+import guldilin.model.Producer;
+import guldilin.repository.ProducerRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+
+@Service
+public class ProducerServiceImpl implements ProducerService {
+    private final ProducerRepository producerRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public ProducerServiceImpl(ProducerRepository producerRepository) {
+        this.producerRepository = producerRepository;
+    }
+
+    @Override
+    public List<ProducerDTO> getAll(String title, String address, String contact) {
+        List<Producer> workerList;
+
+        if (title != null) {
+            workerList = producerRepository.findAllByTitle(title);
+        } else if (address != null) {
+            workerList = producerRepository.findAllByAddress(address);
+        } else if (contact != null) {
+            workerList = producerRepository.findAllByContact(contact);
+        } else{
+            workerList = producerRepository.findAll();
+        }
+        return workerList.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override public ProducerDTO get(Integer id) {
+        Optional<Producer> found = producerRepository.findById(Long.valueOf(id));
+        if (found.isPresent()) {
+            return mapToDTO(found.get());
+        }
+        throw new IllegalArgumentException("No such ");
+    }
+
+    @Override
+    public ProducerDTO create(ProducerDTO workerDTO) {
+        if (producerRepository.findAllByTitle(workerDTO.getTitle()).size() > 0) {
+            throw new IllegalArgumentException(" with name already exists");
+        }
+        try {
+            return mapToDTO(producerRepository.save(mapToEntity(workerDTO)));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Couldn't Save to Database");
+        }
+    }
+
+    private ProducerDTO mapToDTO(Producer producer) {
+        return  modelMapper.map(producer, ProducerDTO.class);
+    }
+
+    private Producer mapToEntity(ProducerDTO producerDTO) {
+        return  modelMapper.map(producerDTO, Producer.class);
+    }
+}
