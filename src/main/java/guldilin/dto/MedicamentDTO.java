@@ -18,6 +18,16 @@ public class MedicamentDTO {
 
     private Integer medicamentClass;
 
+    public MedicamentDTO() {}
+
+    public MedicamentDTO(Medicament medicament) {
+        this.id = medicament.getId();
+        this.title = medicament.getTitle();
+        this.group = medicament.getGroup().getId();
+        this.formula = medicament.getFormula().getId();
+        this.medicamentClass = medicament.getMedicamentClass().getId();
+    }
+
     public Integer getId() {
         return id;
     }
