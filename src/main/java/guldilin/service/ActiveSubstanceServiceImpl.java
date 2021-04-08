@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class ActiveSubstanceServiceImpl implements ActiveSubstanceService {
     private final ActiveSubstanceRepository activeSubstanceRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public ActiveSubstanceServiceImpl(ActiveSubstanceRepository activeSubstanceRepository) {
+    public ActiveSubstanceServiceImpl(ActiveSubstanceRepository activeSubstanceRepository, ModelMapper modelMapper) {
         this.activeSubstanceRepository = activeSubstanceRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override

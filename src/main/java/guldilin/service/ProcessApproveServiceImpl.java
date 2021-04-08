@@ -1,6 +1,5 @@
 package guldilin.service;
 
-import com.jayway.jsonpath.internal.path.PredicatePathToken;
 import guldilin.dto.ProcessApproveDTO;
 import guldilin.model.ProcessApprove;
 import guldilin.repository.ProcessApproveRepository;
@@ -15,14 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProcessApproveServiceImpl implements ProcessApproveService {
-    private final ProcessApproveRepository ProcessApproveRepository;
+    private final ProcessApproveRepository processApproveRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public ProcessApproveServiceImpl(ProcessApproveRepository ProcessApproveRepository) {
-        this.ProcessApproveRepository = ProcessApproveRepository;
+    public ProcessApproveServiceImpl(ProcessApproveRepository processApproveRepository, ModelMapper modelMapper) {
+        this.processApproveRepository = processApproveRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -30,17 +28,17 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         List<ProcessApprove> ProcessApproveList;
 
         if (level != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByLevel(level);
+            ProcessApproveList = processApproveRepository.findAllByLevel(level);
         } else if (ProcessApproveBy != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByWorkerById(ProcessApproveBy);
+            ProcessApproveList = processApproveRepository.findAllByWorkerById(ProcessApproveBy);
         } else if (ProcessApproveTo != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByWorkerToId(ProcessApproveTo);
+            ProcessApproveList = processApproveRepository.findAllByWorkerToId(ProcessApproveTo);
         } else if (create != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByCreated(create);
+            ProcessApproveList = processApproveRepository.findAllByCreated(create);
         } else if (update != null) {
-            ProcessApproveList = ProcessApproveRepository.findAllByUpdated(update);
+            ProcessApproveList = processApproveRepository.findAllByUpdated(update);
         } else{
-            ProcessApproveList = ProcessApproveRepository.findAll();
+            ProcessApproveList = processApproveRepository.findAll();
         }
         return ProcessApproveList.stream()
                 .map(this::mapToDTO)
@@ -49,7 +47,7 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
 
 
     @Override public ProcessApproveDTO get(Integer id) {
-        Optional<ProcessApprove> found = ProcessApproveRepository.findById(Long.valueOf(id));
+        Optional<ProcessApprove> found = processApproveRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
@@ -58,11 +56,11 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
 
     @Override
     public ProcessApproveDTO create(ProcessApproveDTO ProcessApproveDTO) {
-        if (ProcessApproveRepository.findAllById(ProcessApproveDTO.getId()).size() > 0) {
+        if (processApproveRepository.findAllById(ProcessApproveDTO.getId()).size() > 0) {
             throw new IllegalArgumentException(" with name already exists");
         }
         try {
-            return mapToDTO(ProcessApproveRepository.save(mapToEntity(ProcessApproveDTO)));
+            return mapToDTO(processApproveRepository.save(mapToEntity(ProcessApproveDTO)));
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't Save to Database");
         }

@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessServiceImpl implements ProcessService {
     private final ProcessRepository processRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public ProcessServiceImpl(ProcessRepository processRepository) {
+    public ProcessServiceImpl(ProcessRepository processRepository, ModelMapper modelMapper) {
         this.processRepository = processRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override

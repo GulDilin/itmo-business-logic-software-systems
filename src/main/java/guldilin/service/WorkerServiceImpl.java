@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Service
 public class WorkerServiceImpl implements WorkerService {
     private final WorkerRepository workerRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public WorkerServiceImpl(WorkerRepository workerRepository) {
+    public WorkerServiceImpl(WorkerRepository workerRepository, ModelMapper modelMapper) {
         this.workerRepository = workerRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override

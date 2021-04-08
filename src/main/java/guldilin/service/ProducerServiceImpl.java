@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public ProducerServiceImpl(ProducerRepository producerRepository) {
+    public ProducerServiceImpl(ProducerRepository producerRepository, ModelMapper modelMapper) {
         this.producerRepository = producerRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override

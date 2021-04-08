@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class WorkerRoleServiceImpl implements WorkerRoleService {
     private final WorkerRoleRepository workerRoleRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    public WorkerRoleServiceImpl(WorkerRoleRepository workerRoleRepository) {
+    public WorkerRoleServiceImpl(WorkerRoleRepository workerRoleRepository, ModelMapper modelMapper) {
         this.workerRoleRepository = workerRoleRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
