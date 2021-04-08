@@ -10,5 +10,4 @@ public interface ProducerRepository extends JpaRepository<Producer, Long> {
     List<Producer> findAllByTitle(String title);
     List<Producer> findAllByAddress(String address);
     List<Producer> findAllByContact(String contact);
-    Optional<Producer> findById(Integer id);
 }
