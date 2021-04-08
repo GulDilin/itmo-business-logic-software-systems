@@ -59,11 +59,11 @@ public class ActiveSubstanceServiceImpl implements ActiveSubstanceService {
         }
     }
 
-    private ActiveSubstanceDTO mapToDTO(ActiveSubstance ActiveSubstance) {
-        return  modelMapper.map(ActiveSubstance, ActiveSubstanceDTO.class);
+    private ActiveSubstanceDTO mapToDTO(ActiveSubstance activeSubstance) {
+        return  modelMapper.map(activeSubstance, ActiveSubstanceDTO.class);
     }
 
-    private ActiveSubstance mapToEntity(ActiveSubstanceDTO ActiveSubstanceDTO) {
-        return  modelMapper.map(ActiveSubstanceDTO, ActiveSubstance.class);
+    private ActiveSubstance mapToEntity(ActiveSubstanceDTO activeSubstanceDTO) {
+        return  modelMapper.map(activeSubstanceDTO, ActiveSubstance.class);
     }
 }
