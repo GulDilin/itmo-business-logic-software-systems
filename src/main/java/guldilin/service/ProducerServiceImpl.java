@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProducerServiceImpl implements ProducerService {
     private final ProducerRepository producerRepository;
-
     private final ModelMapper modelMapper;
 
     @Autowired

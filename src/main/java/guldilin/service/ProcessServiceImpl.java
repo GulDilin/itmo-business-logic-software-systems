@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessServiceImpl implements ProcessService {
     private final ProcessRepository processRepository;
-
     private final ModelMapper modelMapper;
 
     @Autowired

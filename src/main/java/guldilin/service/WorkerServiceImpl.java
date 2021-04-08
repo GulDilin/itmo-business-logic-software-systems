@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class WorkerServiceImpl implements WorkerService {
     private final WorkerRepository workerRepository;
-
     private final ModelMapper modelMapper;
 
     @Autowired
