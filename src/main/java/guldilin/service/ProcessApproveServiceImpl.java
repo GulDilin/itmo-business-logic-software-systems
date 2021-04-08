@@ -56,7 +56,7 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
 
     @Override
     public ProcessApproveDTO create(ProcessApproveDTO ProcessApproveDTO) {
-        if (processApproveRepository.findAllById(ProcessApproveDTO.getId()).size() > 0) {
+        if (processApproveRepository.findById(ProcessApproveDTO.getId()).isPresent()) {
             throw new IllegalArgumentException(" with name already exists");
         }
         try {

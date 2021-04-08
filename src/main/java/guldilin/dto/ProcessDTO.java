@@ -1,23 +1,21 @@
 package guldilin.dto;
 
-import guldilin.model.Medicament;
-
 import javax.validation.constraints.NotNull;
 
 public class ProcessDTO {
 
-    private Integer id;
+    private Long id;
 
     @NotNull
     private String status;
 
     private Integer medicament;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

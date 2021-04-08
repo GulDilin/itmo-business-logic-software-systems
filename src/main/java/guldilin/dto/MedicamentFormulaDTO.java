@@ -3,7 +3,7 @@ package guldilin.dto;
 import javax.validation.constraints.NotNull;
 
 public class MedicamentFormulaDTO {
-    private Integer id;
+    private Long id;
 
     @NotNull
     private String title;
@@ -12,11 +12,11 @@ public class MedicamentFormulaDTO {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -48,7 +48,7 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
 
     @Override
     public MedicamentInterractDTO create(MedicamentInterractDTO MedicamentInterractDTO) {
-        if (medicamentInterractRepository.findAllById(MedicamentInterractDTO.getId()).size() > 0) {
+        if (medicamentInterractRepository.findById(MedicamentInterractDTO.getId()).isPresent()) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {

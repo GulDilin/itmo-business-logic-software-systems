@@ -9,7 +9,7 @@ public class MedicamentGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -18,11 +18,11 @@ public class MedicamentGroup {
     @OneToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> medicamentList = new ArrayList<>();
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

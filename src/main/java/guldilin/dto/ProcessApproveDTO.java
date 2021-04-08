@@ -1,15 +1,11 @@
 package guldilin.dto;
 
-import guldilin.model.Process;
-import guldilin.model.Worker;
-
-
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class ProcessApproveDTO {
 
-    private Integer id;
+    private Long id;
 
     private String level;
 
@@ -28,11 +24,11 @@ public class ProcessApproveDTO {
 
     private Boolean approved;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

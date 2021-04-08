@@ -1,6 +1,6 @@
 package guldilin.model;
-
-import org.hibernate.annotations.Fetch;
+import guldilin.repository.MedicamentClassRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class Medicament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -36,11 +36,11 @@ public class Medicament {
     @OneToMany(fetch = FetchType.LAZY)
     private Collection<Process> processes = new ArrayList<>();
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

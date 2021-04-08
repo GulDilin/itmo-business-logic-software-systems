@@ -4,19 +4,18 @@ import guldilin.model.*;
 
 import javax.validation.constraints.NotNull;
 
-
 public class MedicamentDTO {
 
-    private Integer id;
+    private Long id;
 
     @NotNull
     private String title;
 
-    private Integer group;
+    private Long group;
 
-    private Integer formula;
+    private Long formula;
 
-    private Integer medicamentClass;
+    private Long medicamentClass;
 
     public MedicamentDTO() {}
 
@@ -28,11 +27,11 @@ public class MedicamentDTO {
         this.medicamentClass = medicament.getMedicamentClass().getId();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -44,27 +43,27 @@ public class MedicamentDTO {
         this.title = title;
     }
 
-    public Integer getGroup() {
+    public Long getGroup() {
         return group;
     }
 
-    public void setGroup(Integer group) {
+    public void setGroup(Long group) {
         this.group = group;
     }
 
-    public Integer getFormula() {
+    public Long getFormula() {
         return formula;
     }
 
-    public void setFormula(Integer formula) {
+    public void setFormula(Long formula) {
         this.formula = formula;
     }
 
-    public Integer getMedicamentClass() {
+    public Long getMedicamentClass() {
         return medicamentClass;
     }
 
-    public void setMedicamentClass(Integer medicamentClass) {
+    public void setMedicamentClass(Long medicamentClass) {
         this.medicamentClass = medicamentClass;
     }
 }

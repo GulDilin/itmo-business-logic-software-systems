@@ -10,7 +10,7 @@ public class WorkerRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(unique = true)
     @NotNull
@@ -30,11 +30,11 @@ public class WorkerRole {
         this.workerList = workerList;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

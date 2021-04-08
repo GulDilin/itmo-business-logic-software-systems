@@ -1,12 +1,10 @@
 package guldilin.dto;
 
-import guldilin.model.Medicament;
-
 import javax.validation.constraints.NotNull;
 
 public class MedicamentInterractDTO {
 
-    private Integer id;
+    private Long id;
 
     @NotNull
     private Integer medicament1;
@@ -16,11 +14,11 @@ public class MedicamentInterractDTO {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

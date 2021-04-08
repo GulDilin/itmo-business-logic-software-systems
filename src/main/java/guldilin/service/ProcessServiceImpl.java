@@ -49,7 +49,7 @@ public class ProcessServiceImpl implements ProcessService {
 
     @Override
     public ProcessDTO create(ProcessDTO ProcessDTO) {
-        if (processRepository.findAllById(ProcessDTO.getId()).size() > 0) {
+        if (processRepository.findById(ProcessDTO.getId()).isPresent()) {
             throw new IllegalArgumentException("Role with title already exists");
         }
         try {

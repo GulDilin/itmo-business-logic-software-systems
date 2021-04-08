@@ -2,7 +2,7 @@ package guldilin.dto;
 
 public class ProducerDTO {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -10,11 +10,11 @@ public class ProducerDTO {
 
     private String contact;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

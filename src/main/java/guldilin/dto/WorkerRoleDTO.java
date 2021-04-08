@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class WorkerRoleDTO implements Serializable {
 
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Title cannot be blank")
     private String title;
@@ -16,11 +16,11 @@ public class WorkerRoleDTO implements Serializable {
     @Min(value = 0, message = "Level should not be less than 0")
     private Integer level;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

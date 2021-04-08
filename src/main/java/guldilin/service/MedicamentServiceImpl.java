@@ -38,11 +38,11 @@ public class MedicamentServiceImpl implements MedicamentService {
 
         if (title != null) {
             MedicamentList = medicamentRepository.findAllByTitle(title);
-        }  else if (groupId != null) {
+        } else if (groupId != null) {
             MedicamentList = medicamentRepository.findAllByGroupId(groupId);
-        }  else if (formulaId != null) {
+        } else if (formulaId != null) {
             MedicamentList = medicamentRepository.findAllByFormulaId(formulaId);
-        }  else if (activeSubstanceId != null) {
+        } else if (activeSubstanceId != null) {
             MedicamentList = medicamentRepository.findAllByActiveSubstancesId(activeSubstanceId);
         } else {
             MedicamentList = medicamentRepository.findAll();
@@ -79,9 +79,15 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
         Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
-        medicament.setFormula(medicamentFormulaRepository.findById(medicamentDTO.getFormula()));
-        medicament.setGroup(medicamentGroupRepository.findById(medicamentDTO.getGroup()));
-        medicament.setMedicamentClass(medicamentClassRepository.findById(medicamentDTO.getMedicamentClass()));
+        medicament.setFormula(
+                medicamentFormulaRepository.findById(medicamentDTO.getFormula())
+                        .orElseThrow(() -> new IllegalArgumentException("No such formula")));
+        medicament.setGroup(
+                medicamentGroupRepository.findById(medicamentDTO.getGroup())
+                        .orElseThrow(() -> new IllegalArgumentException("No such medical group")));
+        medicament.setMedicamentClass(
+                medicamentClassRepository.findById(medicamentDTO.getMedicamentClass())
+                        .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
         return medicament;
     }
 }
