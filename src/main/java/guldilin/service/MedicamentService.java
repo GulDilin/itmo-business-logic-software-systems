@@ -1,6 +1,5 @@
 package guldilin.service;
 
-import guldilin.dto.MedicamentClassDTO;
 import guldilin.dto.MedicamentDTO;
 import guldilin.dto.UpdateMedicamentDTO;
 
