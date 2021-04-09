@@ -1,6 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.MedicamentDTO;
+import guldilin.dto.UpdateMedicamentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,10 @@ public class MedicamentController implements ValidationExceptionHandler {
         this.MedicamentService = MedicamentService;
     }
 
-    @GetMapping("/api/medicaments")
+    @GetMapping(
+            path = "/api/medicaments",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Object> gets(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Long groupId,
@@ -29,9 +33,22 @@ public class MedicamentController implements ValidationExceptionHandler {
         return ResponseEntity.ok(MedicamentService.getAll(title, groupId, formulaId, activeSubstanceId));
     }
 
-    @GetMapping("/api/medicaments/{id}")
+    @GetMapping(
+            path ="/api/medicaments/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Object> get(@PathVariable Integer id) {
         return ResponseEntity.ok(MedicamentService.get(id));
+    }
+
+    @PatchMapping(
+            path = "/api/medicaments/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> patch(@PathVariable Long id, @RequestBody UpdateMedicamentDTO medicamentDTO) {
+        medicamentDTO.setId(id);
+        return ResponseEntity.ok(MedicamentService.update(medicamentDTO));
     }
 
     @PostMapping(

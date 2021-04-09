@@ -1,6 +1,7 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentDTO;
+import guldilin.dto.UpdateMedicamentDTO;
 import guldilin.model.Medicament;
 import guldilin.repository.MedicamentClassRepository;
 import guldilin.repository.MedicamentFormulaRepository;
@@ -67,6 +68,27 @@ public class MedicamentServiceImpl implements MedicamentService {
             throw new IllegalArgumentException("Medicament with title already exists");
         }
         return mapToDTO(medicamentRepository.save(mapToEntity(medicamentDTO)));
+    }
+
+    @Override
+    public MedicamentDTO update(UpdateMedicamentDTO updateMedicamentDTO) {
+        Medicament medicament = medicamentRepository.findById(updateMedicamentDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+
+        Medicament newMedicament = mapToEntity(updateMedicamentDTO);
+        if (updateMedicamentDTO.getTitle() != null) {
+            medicament.setTitle(updateMedicamentDTO.getTitle());
+        }
+        if (newMedicament.getMedicamentClass() != null) {
+            medicament.setMedicamentClass(newMedicament.getMedicamentClass());
+        }
+        if (newMedicament.getFormula() != null) {
+            medicament.setFormula(newMedicament.getFormula());
+        }
+        if (newMedicament.getGroup() != null) {
+            medicament.setGroup(newMedicament.getGroup());
+        }
+        return  mapToDTO(medicamentRepository.save(medicament));
     }
 
     private MedicamentDTO mapToDTO(Medicament medicament) {
