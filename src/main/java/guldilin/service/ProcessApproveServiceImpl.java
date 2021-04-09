@@ -31,19 +31,17 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
     @Override
-    public List<ProcessApproveDTO> getAll(String level, Long ProcessApproveBy, Long ProcessApproveTo, Date create, Date update) {
+    public List<ProcessApproveDTO> getAll(Long processId, Integer level, Long workerById, Long workerToId) {
         List<ProcessApprove> ProcessApproveList;
 
         if (level != null) {
             ProcessApproveList = processApproveRepository.findAllByLevel(level);
-        } else if (ProcessApproveBy != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerById(ProcessApproveBy);
-        } else if (ProcessApproveTo != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerToId(ProcessApproveTo);
-        } else if (create != null) {
-            ProcessApproveList = processApproveRepository.findAllByCreated(create);
-        } else if (update != null) {
-            ProcessApproveList = processApproveRepository.findAllByUpdated(update);
+        } else if (processId != null) {
+            ProcessApproveList = processApproveRepository.findAllByProcessId(processId);
+        } else if (workerById != null) {
+            ProcessApproveList = processApproveRepository.findAllByWorkerById(workerById);
+        } else if (workerToId != null) {
+            ProcessApproveList = processApproveRepository.findAllByWorkerToId(workerToId);
         } else{
             ProcessApproveList = processApproveRepository.findAll();
         }
@@ -54,8 +52,8 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
 
 
     @Override
-    public ProcessApproveDTO get(Integer id) {
-        Optional<ProcessApprove> found = processApproveRepository.findById(Long.valueOf(id));
+    public ProcessApproveDTO get(Long id) {
+        Optional<ProcessApprove> found = processApproveRepository.findById(id);
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }

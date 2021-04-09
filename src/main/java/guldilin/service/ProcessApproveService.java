@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface ProcessApproveService {
-    List<ProcessApproveDTO> getAll(String level, Long workerBy, Long workerTo, Date create, Date update);
-    ProcessApproveDTO get(Integer id);
+    List<ProcessApproveDTO> getAll(Long processId, Integer level, Long workerById, Long workerToId);
+    ProcessApproveDTO get(Long id);
     ProcessApproveDTO create(ProcessApproveDTO processApproveDTO);
     ProcessApproveDTO update(ProcessApproveDTO processApproveDTO);
 }

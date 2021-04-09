@@ -23,17 +23,15 @@ public class ProcessApproveController implements ValidationExceptionHandler {
 
     @GetMapping("/api/approve")
     public ResponseEntity<List<ProcessApproveDTO>> gets(
-            @RequestParam(required = false) String level,
+            @RequestParam(required = false) Integer level,
             @RequestParam(required = false) Long workerBy,
-            @RequestParam(required = false) Long workerTo,
-            @RequestParam(required = false) Date create,
-            @RequestParam(required = false) Date update
+            @RequestParam(required = false) Long workerTo
     ) {
-        return ResponseEntity.ok(processApproveService.getAll(level, workerBy, workerTo, create, update));
+        return ResponseEntity.ok(processApproveService.getAll(null, level, workerBy, workerTo));
     }
 
     @GetMapping("/api/approve/{id}")
-    public ResponseEntity<ProcessApproveDTO> get(@PathVariable Integer id) {
+    public ResponseEntity<ProcessApproveDTO> get(@PathVariable Long id) {
         return ResponseEntity.ok(processApproveService.get(id));
     }
 
@@ -51,7 +49,7 @@ public class ProcessApproveController implements ValidationExceptionHandler {
             path = "/api/approve/{id}/approve",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> approve(@PathVariable Integer id) {
+    public ResponseEntity<Object> approve(@PathVariable Long id) {
         ProcessApproveDTO processApproveDTO = processApproveService.get(id);
         processApproveDTO.setApproved(true);
         return ResponseEntity.ok(processApproveService.update(processApproveDTO));
