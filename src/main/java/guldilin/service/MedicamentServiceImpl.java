@@ -3,7 +3,7 @@ package guldilin.service;
 import guldilin.dto.MedicamentDTO;
 import guldilin.dto.UpdateMedicamentDTO;
 import guldilin.model.Medicament;
-import guldilin.repository.MedicamentClassRepository;
+import guldilin.repository.MedicamentTypeRepository;
 import guldilin.repository.MedicamentFormulaRepository;
 import guldilin.repository.MedicamentGroupRepository;
 import guldilin.repository.MedicamentRepository;
@@ -20,15 +20,15 @@ public class MedicamentServiceImpl implements MedicamentService {
     private final MedicamentRepository medicamentRepository;
     private final MedicamentFormulaRepository medicamentFormulaRepository;
     private final MedicamentGroupRepository medicamentGroupRepository;
-    private final MedicamentClassRepository medicamentClassRepository;
+    private final MedicamentTypeRepository medicamentTypeRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, MedicamentFormulaRepository medicamentFormulaRepository, MedicamentGroupRepository medicamentGroupRepository, MedicamentClassRepository medicamentClassRepository, ModelMapper modelMapper) {
+    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, MedicamentFormulaRepository medicamentFormulaRepository, MedicamentGroupRepository medicamentGroupRepository, MedicamentTypeRepository medicamentTypeRepository, ModelMapper modelMapper) {
         this.medicamentRepository = medicamentRepository;
         this.medicamentFormulaRepository = medicamentFormulaRepository;
         this.medicamentGroupRepository = medicamentGroupRepository;
-        this.medicamentClassRepository = medicamentClassRepository;
+        this.medicamentTypeRepository = medicamentTypeRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -79,8 +79,8 @@ public class MedicamentServiceImpl implements MedicamentService {
         if (updateMedicamentDTO.getTitle() != null) {
             medicament.setTitle(updateMedicamentDTO.getTitle());
         }
-        if (newMedicament.getMedicamentClass() != null) {
-            medicament.setMedicamentClass(newMedicament.getMedicamentClass());
+        if (newMedicament.getMedicamentType() != null) {
+            medicament.setMedicamentType(newMedicament.getMedicamentType());
         }
         if (newMedicament.getFormula() != null) {
             medicament.setFormula(newMedicament.getFormula());
@@ -108,8 +108,8 @@ public class MedicamentServiceImpl implements MedicamentService {
                             .orElseThrow(() -> new IllegalArgumentException("No such medical group")));
         }
         if (medicamentDTO.getMedicamentClass() != null) {
-            medicament.setMedicamentClass(
-                    medicamentClassRepository.findById(medicamentDTO.getMedicamentClass())
+            medicament.setMedicamentType(
+                    medicamentTypeRepository.findById(medicamentDTO.getMedicamentClass())
                             .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
         }
         return medicament;

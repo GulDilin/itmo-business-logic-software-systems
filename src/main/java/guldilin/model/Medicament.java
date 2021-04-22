@@ -1,6 +1,4 @@
 package guldilin.model;
-import guldilin.repository.MedicamentClassRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,13 +20,13 @@ public class Medicament {
     private MedicamentFormula formula;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MedicamentClass medicamentClass;
+    private MedicamentType medicamentType;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> analogs;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private  Collection<Producer> producers;
+    private  Collection<Vendor> vendors;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private  Collection<ActiveSubstance> activeSubstances;
@@ -68,12 +66,12 @@ public class Medicament {
         this.formula = formula;
     }
 
-    public MedicamentClass getMedicamentClass() {
-        return medicamentClass;
+    public MedicamentType getMedicamentType() {
+        return medicamentType;
     }
 
-    public void setMedicamentClass(MedicamentClass medicamentClass) {
-        this.medicamentClass = medicamentClass;
+    public void setMedicamentType(MedicamentType medicamentType) {
+        this.medicamentType = medicamentType;
     }
 
     public Collection<Medicament> getAnalogs() {
@@ -84,12 +82,12 @@ public class Medicament {
         this.analogs = analogs;
     }
 
-    public Collection<Producer> getProducers() {
-        return producers;
+    public Collection<Vendor> getVendors() {
+        return vendors;
     }
 
-    public void setProducers(Collection<Producer> producers) {
-        this.producers = producers;
+    public void setVendors(Collection<Vendor> vendors) {
+        this.vendors = vendors;
     }
 
     public Collection<ActiveSubstance> getActiveSubstances() {

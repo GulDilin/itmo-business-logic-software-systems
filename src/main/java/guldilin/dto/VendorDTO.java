@@ -1,23 +1,17 @@
-package guldilin.model;
+package guldilin.dto;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.validation.constraints.NotBlank;
 
-@Entity
-public class Producer {
+public class VendorDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
     private String address;
 
     private String contact;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Collection<Medicament> medicaments;
 
     public Long getId() {
         return id;
@@ -49,13 +43,5 @@ public class Producer {
 
     public void setContact(String contact) {
         this.contact = contact;
-    }
-
-    public Collection<Medicament> getMedicaments() {
-        return medicaments;
-    }
-
-    public void setMedicaments(Collection<Medicament> medicaments) {
-        this.medicaments = medicaments;
     }
 }

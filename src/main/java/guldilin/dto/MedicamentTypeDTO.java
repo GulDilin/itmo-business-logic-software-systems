@@ -1,10 +1,10 @@
 package guldilin.dto;
 
-import guldilin.model.MedicamentClass;
+import guldilin.model.MedicamentType;
 
 import javax.validation.constraints.NotBlank;
 
-public class MedicamentClassDTO {
+public class MedicamentTypeDTO {
 
     private Long id;
 
@@ -15,16 +15,16 @@ public class MedicamentClassDTO {
 
     private String description;
 
-    public MedicamentClassDTO() {
+    public MedicamentTypeDTO() {
     }
 
-    public MedicamentClassDTO(MedicamentClass medicamentClass) {
-        this.id = medicamentClass.getId();
-        if (medicamentClass.getParentClass() != null) {
-            this.parentClass = medicamentClass.getParentClass().getId();
+    public MedicamentTypeDTO(MedicamentType medicamentType) {
+        this.id = medicamentType.getId();
+        if (medicamentType.getParentClass() != null) {
+            this.parentClass = medicamentType.getParentClass().getId();
         }
-        this.title = medicamentClass.getTitle();
-        this.description = medicamentClass.getDescription();
+        this.title = medicamentType.getTitle();
+        this.description = medicamentType.getDescription();
     }
 
     public Long getId() {

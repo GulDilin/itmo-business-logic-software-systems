@@ -28,8 +28,8 @@ public class MedicamentDTO {
         if (medicament.getFormula() != null) {
             this.formula = medicament.getFormula().getId();
         }
-        if (medicament.getMedicamentClass() != null) {
-            this.medicamentClass = medicament.getMedicamentClass().getId();
+        if (medicament.getMedicamentType() != null) {
+            this.medicamentClass = medicament.getMedicamentType().getId();
         }
     }
 

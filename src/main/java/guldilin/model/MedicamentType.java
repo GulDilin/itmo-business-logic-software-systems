@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-public class MedicamentClass {
+public class MedicamentType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private MedicamentClass parentClass;
+    private MedicamentType parentClass;
 
     private String title;
 
@@ -29,11 +29,11 @@ public class MedicamentClass {
         this.id = id;
     }
 
-    public MedicamentClass getParentClass() {
+    public MedicamentType getParentClass() {
         return parentClass;
     }
 
-    public void setParentClass(MedicamentClass parentClass) {
+    public void setParentClass(MedicamentType parentClass) {
         this.parentClass = parentClass;
     }
 
