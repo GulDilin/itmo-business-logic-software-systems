@@ -17,8 +17,8 @@ public class ProcessApproveController implements ValidationExceptionHandler {
     private final ProcessApproveService processApproveService;
 
     @Autowired
-    public ProcessApproveController(guldilin.service.ProcessApproveService ProcessApproveService) {
-        this.processApproveService = ProcessApproveService;
+    public ProcessApproveController(guldilin.service.ProcessApproveService processApproveService) {
+        this.processApproveService = processApproveService;
     }
 
     @GetMapping("/api/approve")
@@ -42,8 +42,8 @@ public class ProcessApproveController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO ProcessApproveDTO) {
-        return ResponseEntity.ok(processApproveService.create(ProcessApproveDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO processApproveDTO) {
+        return ResponseEntity.ok(processApproveService.create(processApproveDTO));
 
     }
 

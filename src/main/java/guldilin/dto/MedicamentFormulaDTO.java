@@ -1,8 +1,15 @@
 package guldilin.dto;
 
-import javax.validation.constraints.NotBlank;
+import guldilin.model.MedicamentFormula;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class MedicamentFormulaDTO {
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+public class MedicamentFormulaDTO implements Serializable {
     private Long id;
 
     @NotBlank(message = "Title cannot be blank")
@@ -12,35 +19,9 @@ public class MedicamentFormulaDTO {
 
     private String description;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public MedicamentFormulaDTO(MedicamentFormula medicamentFormula) {
+        this.title = medicamentFormula.getTitle();
+        this.text = medicamentFormula.getText();
+        this.description = medicamentFormula.getDescription();
     }
 }

@@ -1,12 +1,17 @@
 package guldilin.dto;
 
 import guldilin.model.ProcessApprove;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProcessApproveDTO {
+@Data
+@NoArgsConstructor
+public class ProcessApproveDTO implements Serializable {
 
     private Long id;
 
@@ -29,8 +34,6 @@ public class ProcessApproveDTO {
 
     private Boolean approved;
 
-    ProcessApproveDTO() {}
-
     public ProcessApproveDTO(ProcessApprove processApprove) {
         this.id = processApprove.getId();
         this.level = processApprove.getLevel();
@@ -46,69 +49,5 @@ public class ProcessApproveDTO {
         this.created = processApprove.getCreated();
         this.updated = processApprove.getUpdated();
         this.approved = processApprove.getApproved();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Long getWorkerBy() {
-        return workerBy;
-    }
-
-    public void setWorkerBy(Long workerBy) {
-        this.workerBy = workerBy;
-    }
-
-    public Long getWorkerTo() {
-        return workerTo;
-    }
-
-    public void setWorkerTo(Long workerTo) {
-        this.workerTo = workerTo;
-    }
-
-    public Long getProcess() {
-        return process;
-    }
-
-    public void setProcess(Long process) {
-        this.process = process;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
     }
 }

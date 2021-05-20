@@ -3,8 +3,12 @@ package guldilin.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class MedicamentGroup {
 
     @Id
@@ -18,35 +22,5 @@ public class MedicamentGroup {
     @OneToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> medicamentList = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Collection<Medicament> getMedicamentList() {
-        return medicamentList;
-    }
-
-    public void setMedicamentList(Collection<Medicament> medicamentList) {
-        this.medicamentList = medicamentList;
-    }
 }

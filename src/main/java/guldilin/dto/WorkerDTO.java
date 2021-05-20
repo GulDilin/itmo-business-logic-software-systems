@@ -1,11 +1,16 @@
 package guldilin.dto;
 
 import guldilin.model.Worker;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
 public class WorkerDTO implements Serializable {
     private Long id;
 
@@ -19,7 +24,8 @@ public class WorkerDTO implements Serializable {
 
     private String email;
 
-    WorkerDTO() {}
+    @NotBlank(message = "login cannot be blank")
+    private String login;
 
     public WorkerDTO(Worker worker) {
         this.id = worker.getId();
@@ -29,45 +35,6 @@ public class WorkerDTO implements Serializable {
         }
         this.phone = worker.getPhone();
         this.email = worker.getEmail();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getRole() {
-        return role;
-    }
-
-    public void setRole(Long role) {
-        this.role = role;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.login = worker.getLogin();
     }
 }

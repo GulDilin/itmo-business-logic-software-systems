@@ -13,11 +13,11 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentTypeController implements ValidationExceptionHandler {
 
-    private final MedicamentTypeService MedicamentTypeService;
+    private final MedicamentTypeService medicamentTypeService;
 
     @Autowired
-    public MedicamentTypeController(MedicamentTypeService MedicamentTypeService) {
-        this.MedicamentTypeService = MedicamentTypeService;
+    public MedicamentTypeController(MedicamentTypeService medicamentTypeService) {
+        this.medicamentTypeService = medicamentTypeService;
     }
 
     @GetMapping("/api/types")
@@ -25,12 +25,12 @@ public class MedicamentTypeController implements ValidationExceptionHandler {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String description
     ) {
-        return ResponseEntity.ok(MedicamentTypeService.getAll(title, description));
+        return ResponseEntity.ok(medicamentTypeService.getAll(title, description));
     }
 
     @GetMapping("/api/types/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
-        return ResponseEntity.ok(MedicamentTypeService.get(id));
+        return ResponseEntity.ok(medicamentTypeService.get(id));
     }
 
     @PostMapping(
@@ -38,7 +38,7 @@ public class MedicamentTypeController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentTypeDTO MedicamentTypeDTO) {
-        return ResponseEntity.ok(MedicamentTypeService.create(MedicamentTypeDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentTypeDTO medicamentTypeDTO) {
+        return ResponseEntity.ok(medicamentTypeService.create(medicamentTypeDTO));
     }
 }

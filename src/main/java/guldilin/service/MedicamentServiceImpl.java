@@ -1,8 +1,10 @@
 package guldilin.service;
 
 import guldilin.dto.MedicamentDTO;
+import guldilin.dto.MedicamentFormulaDTO;
 import guldilin.dto.UpdateMedicamentDTO;
 import guldilin.model.Medicament;
+import guldilin.model.MedicamentFormula;
 import guldilin.repository.MedicamentTypeRepository;
 import guldilin.repository.MedicamentFormulaRepository;
 import guldilin.repository.MedicamentGroupRepository;
@@ -11,8 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,12 +55,31 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public MedicamentDTO get(Integer id) {
-        Optional<Medicament> found = medicamentRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
+    public MedicamentDTO get(Long id) {
+        return mapToDTO(medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament")));
+    }
+
+    @Override
+    public MedicamentFormulaDTO getFormula(Long id) {
+        Medicament medicament = medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+        if (medicament.getFormula() == null) {
+            throw new IllegalArgumentException("Formula not found");
         }
-        throw new IllegalArgumentException("No such medicament");
+        return new MedicamentFormulaDTO(medicament.getFormula());
+    }
+
+    @Override
+    public MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO) {
+        medicamentFormulaDTO.setId(null);
+        Medicament medicament = medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+        MedicamentFormula medicamentFormula = mapToEntity(medicamentFormulaDTO);
+        medicamentFormulaRepository.save(medicamentFormula);
+        medicament.setFormula(medicamentFormula);
+        medicamentRepository.save(medicament);
+        return mapToDTO(medicamentFormula);
     }
 
     @Override
@@ -94,14 +115,17 @@ public class MedicamentServiceImpl implements MedicamentService {
     private MedicamentDTO mapToDTO(Medicament medicament) {
         return new MedicamentDTO(medicament);
     }
+    private MedicamentFormulaDTO mapToDTO(MedicamentFormula medicamentFormula) {
+        return modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
+    }
 
     private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
         Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
-        if (medicamentDTO.getFormula() != null) {
-            medicament.setFormula(
-                    medicamentFormulaRepository.findById(medicamentDTO.getFormula())
-                            .orElseThrow(() -> new IllegalArgumentException("No such formula")));
-        }
+//        if (medicamentDTO.getFormula() != null) {
+//            medicament.setFormula(
+//                    medicamentFormulaRepository.findById(medicamentDTO.getFormula())
+//                            .orElseThrow(() -> new IllegalArgumentException("No such formula")));
+//        }
         if (medicamentDTO.getGroup() != null) {
             medicament.setGroup(
                     medicamentGroupRepository.findById(medicamentDTO.getGroup())
@@ -113,5 +137,9 @@ public class MedicamentServiceImpl implements MedicamentService {
                             .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
         }
         return medicament;
+    }
+
+    private MedicamentFormula mapToEntity(MedicamentFormulaDTO medicamentFormulaDTO) {
+        return modelMapper.map(medicamentFormulaDTO, MedicamentFormula.class);
     }
 }

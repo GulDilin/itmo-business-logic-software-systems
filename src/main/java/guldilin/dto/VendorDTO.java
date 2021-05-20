@@ -1,8 +1,14 @@
 package guldilin.dto;
 
-import javax.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class VendorDTO {
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+public class VendorDTO implements Serializable {
 
     private Long id;
 
@@ -12,36 +18,4 @@ public class VendorDTO {
     private String address;
 
     private String contact;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
 }

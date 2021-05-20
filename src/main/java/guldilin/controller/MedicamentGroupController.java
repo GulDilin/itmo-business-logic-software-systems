@@ -12,11 +12,11 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentGroupController implements ValidationExceptionHandler {
 
-    private final guldilin.service.MedicamentGroupService MedicamentGroupService;
+    private final guldilin.service.MedicamentGroupService medicamentGroupService;
 
     @Autowired
-    public MedicamentGroupController(guldilin.service.MedicamentGroupService MedicamentGroupService) {
-        this.MedicamentGroupService = MedicamentGroupService;
+    public MedicamentGroupController(guldilin.service.MedicamentGroupService medicamentGroupService) {
+        this.medicamentGroupService = medicamentGroupService;
     }
 
     @GetMapping("/api/groups")
@@ -24,12 +24,12 @@ public class MedicamentGroupController implements ValidationExceptionHandler {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String description
     ) {
-        return ResponseEntity.ok(MedicamentGroupService.getAll(title, description));
+        return ResponseEntity.ok(medicamentGroupService.getAll(title, description));
     }
 
     @GetMapping("/api/groups/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
-        return ResponseEntity.ok(MedicamentGroupService.get(id));
+        return ResponseEntity.ok(medicamentGroupService.get(id));
     }
 
     @PostMapping(
@@ -37,7 +37,7 @@ public class MedicamentGroupController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentGroupDTO MedicamentGroupDTO) {
-        return ResponseEntity.ok(MedicamentGroupService.create(MedicamentGroupDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentGroupDTO medicamentGroupDTO) {
+        return ResponseEntity.ok(medicamentGroupService.create(medicamentGroupDTO));
     }
 }

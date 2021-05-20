@@ -1,10 +1,15 @@
 package guldilin.dto;
 
 import guldilin.model.MedicamentType;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
-public class MedicamentTypeDTO {
+@Data
+@NoArgsConstructor
+public class MedicamentTypeDTO implements Serializable {
 
     private Long id;
 
@@ -15,9 +20,6 @@ public class MedicamentTypeDTO {
 
     private String description;
 
-    public MedicamentTypeDTO() {
-    }
-
     public MedicamentTypeDTO(MedicamentType medicamentType) {
         this.id = medicamentType.getId();
         if (medicamentType.getParentClass() != null) {
@@ -25,37 +27,5 @@ public class MedicamentTypeDTO {
         }
         this.title = medicamentType.getTitle();
         this.description = medicamentType.getDescription();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getParentClass() {
-        return parentClass;
-    }
-
-    public void setParentClass(Long parentGroup) {
-        this.parentClass = parentGroup;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

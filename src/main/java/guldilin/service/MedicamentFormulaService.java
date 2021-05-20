@@ -7,5 +7,5 @@ import java.util.List;
 public interface MedicamentFormulaService {
     List<MedicamentFormulaDTO> getAll(String title, String description);
     MedicamentFormulaDTO get(Integer id);
-    MedicamentFormulaDTO create(MedicamentFormulaDTO MedicamentFormulaDTO);
+    MedicamentFormulaDTO create(MedicamentFormulaDTO medicamentFormulaDTO);
 }

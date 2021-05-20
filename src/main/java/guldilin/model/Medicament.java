@@ -1,10 +1,16 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+
 @Entity
+@Data
+@NoArgsConstructor
 public class Medicament {
 
     @Id
@@ -34,75 +40,4 @@ public class Medicament {
     @OneToMany(fetch = FetchType.LAZY)
     private Collection<Process> processes = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public MedicamentGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(MedicamentGroup group) {
-        this.group = group;
-    }
-
-    public MedicamentFormula getFormula() {
-        return formula;
-    }
-
-    public void setFormula(MedicamentFormula formula) {
-        this.formula = formula;
-    }
-
-    public MedicamentType getMedicamentType() {
-        return medicamentType;
-    }
-
-    public void setMedicamentType(MedicamentType medicamentType) {
-        this.medicamentType = medicamentType;
-    }
-
-    public Collection<Medicament> getAnalogs() {
-        return analogs;
-    }
-
-    public void setAnalogs(Collection<Medicament> analogs) {
-        this.analogs = analogs;
-    }
-
-    public Collection<Vendor> getVendors() {
-        return vendors;
-    }
-
-    public void setVendors(Collection<Vendor> vendors) {
-        this.vendors = vendors;
-    }
-
-    public Collection<ActiveSubstance> getActiveSubstances() {
-        return activeSubstances;
-    }
-
-    public void setActiveSubstances(Collection<ActiveSubstance> activeSubstances) {
-        this.activeSubstances = activeSubstances;
-    }
-
-    public Collection<Process> getProcesses() {
-        return processes;
-    }
-
-    public void setProcesses(Collection<Process> processes) {
-        this.processes = processes;
-    }
 }

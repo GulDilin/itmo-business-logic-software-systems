@@ -24,22 +24,15 @@ public class WorkerController implements ValidationExceptionHandler {
     public ResponseEntity<Object> gets(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long workerRole,
-            @RequestParam(required = false) String email
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String login,
+            @RequestParam(required = false) String password
     ) {
-        return ResponseEntity.ok(workerService.getAll(name, workerRole, email));
+        return ResponseEntity.ok(workerService.getAll(name, workerRole, email, login, password));
     }
 
     @GetMapping("/api/workers/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
         return ResponseEntity.ok(workerService.get(id));
-    }
-
-    @PostMapping(
-            path = "/api/workers",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Object> create(@RequestBody @Valid WorkerDTO workerDTO) {
-        return ResponseEntity.ok(workerService.create(workerDTO));
     }
 }

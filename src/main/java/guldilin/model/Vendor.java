@@ -1,9 +1,14 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Vendor {
 
     @Id
@@ -19,43 +24,5 @@ public class Vendor {
     @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Medicament> medicaments;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public Collection<Medicament> getMedicaments() {
-        return medicaments;
-    }
-
-    public void setMedicaments(Collection<Medicament> medicaments) {
-        this.medicaments = medicaments;
-    }
 }
