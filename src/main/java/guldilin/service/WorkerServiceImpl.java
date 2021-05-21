@@ -65,9 +65,6 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public WorkerDTO create(WorkerRegistrationRequestDTO workerDTO) {
-        if (workerRepository.findAllByName(workerDTO.getName()).size() > 0) {
-            throw new IllegalArgumentException("Worker with name already exists");
-        }
         Optional<Worker> found = workerRepository.findByLogin(workerDTO.getLogin());
         if (found.isPresent()) {
             throw new IllegalArgumentException("Worker with such login already exists");
@@ -95,7 +92,7 @@ public class WorkerServiceImpl implements WorkerService {
         Worker worker = modelMapper.map(workerDTO, Worker.class);
         if (workerDTO.getRole() != null) {
             worker.setRole(
-                    workerRoleRepository.findById(workerDTO.getRole())
+                    workerRoleRepository.findByTitle(workerDTO.getRole())
                             .orElseThrow(() -> new IllegalArgumentException("No such worker role")));
         }
         return worker;

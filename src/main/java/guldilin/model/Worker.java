@@ -14,7 +14,7 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  String name;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private WorkerRole role;
@@ -27,7 +27,6 @@ public class Worker {
     private String login;
 
     @Column(nullable = false)
-    private  String password;
-
+    private String password;
 
 }

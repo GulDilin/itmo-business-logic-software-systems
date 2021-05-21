@@ -17,7 +17,7 @@ public class WorkerRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     @NotNull
     private String title;
 

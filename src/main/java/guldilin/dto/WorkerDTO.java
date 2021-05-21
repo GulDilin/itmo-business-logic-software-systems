@@ -1,6 +1,7 @@
 package guldilin.dto;
 
 import guldilin.model.Worker;
+import guldilin.model.WorkerRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +18,8 @@ public class WorkerDTO implements Serializable {
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    @NotNull(message = "Role cannot be null")
-    private Long role;
+    @NotBlank(message = "Role cannot be blank")
+    private String role;
 
     private String phone;
 
@@ -31,7 +32,7 @@ public class WorkerDTO implements Serializable {
         this.id = worker.getId();
         this.name = worker.getName();
         if (worker.getRole() != null) {
-            this.role = worker.getRole().getId();
+            this.role = worker.getRole().getTitle();
         }
         this.phone = worker.getPhone();
         this.email = worker.getEmail();

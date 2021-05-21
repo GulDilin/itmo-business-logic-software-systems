@@ -1,6 +1,5 @@
 package guldilin.config;
 
-import guldilin.dto.WorkerDTO;
 import guldilin.model.Worker;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
         CustomUserDetails c = new CustomUserDetails();
         c.login = worker.getLogin();
         c.password = worker.getPassword();
-        c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(worker.getRole().getClass().getName()));
+        c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(worker.getRole().getTitle()));
         return c;
     }
 
