@@ -31,15 +31,15 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
     @Override
-    public List<ProcessApproveDTO> getAll(String level, Long ProcessApproveBy, Long ProcessApproveTo, Date create, Date update) {
+    public List<ProcessApproveDTO> getAll(String level, Long processApproveById, Long processApproveToId, Date create, Date update) {
         List<ProcessApprove> ProcessApproveList;
 
         if (level != null) {
             ProcessApproveList = processApproveRepository.findAllByLevel(level);
-        } else if (ProcessApproveBy != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerById(ProcessApproveBy);
-        } else if (ProcessApproveTo != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerToId(ProcessApproveTo);
+        } else if (processApproveById != null) {
+            ProcessApproveList = processApproveRepository.findAllByWorkerBy(processApproveById);
+        } else if (processApproveToId != null) {
+            ProcessApproveList = processApproveRepository.findAllByWorkerTo(processApproveToId);
         } else if (create != null) {
             ProcessApproveList = processApproveRepository.findAllByCreated(create);
         } else if (update != null) {
@@ -102,12 +102,12 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         if (processApproveDTO.getWorkerBy() != null) {
             processApprove.setWorkerBy(
                     workerRepository.findById(processApproveDTO.getWorkerBy())
-                            .orElseThrow(() -> new IllegalArgumentException("No such workerBy")));
+                            .orElseThrow(() -> new IllegalArgumentException("No such workerBy")).getId());
         }
         if (processApproveDTO.getWorkerTo() != null) {
             processApprove.setWorkerTo(
                     workerRepository.findById(processApproveDTO.getWorkerTo())
-                            .orElseThrow(() -> new IllegalArgumentException("No such workerTo")));
+                            .orElseThrow(() -> new IllegalArgumentException("No such workerTo")).getId());
         }
 
         return processApprove;

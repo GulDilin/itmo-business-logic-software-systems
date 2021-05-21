@@ -17,11 +17,9 @@ public class ProcessApprove {
 
     private Integer level;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Worker workerBy;
+    private Long workerBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Worker workerTo;
+    private Long workerTo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Process process;

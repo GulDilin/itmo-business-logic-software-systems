@@ -19,7 +19,6 @@ public class ProcessApproveDTO implements Serializable {
     @Min(value = 1)
     private Integer level;
 
-    @NotNull(message = "workerBy cannot be null")
     private Long workerBy;
 
     @NotNull(message = "workerTo cannot be null")
@@ -38,10 +37,10 @@ public class ProcessApproveDTO implements Serializable {
         this.id = processApprove.getId();
         this.level = processApprove.getLevel();
         if (processApprove.getWorkerBy() != null) {
-            this.workerBy = processApprove.getWorkerBy().getId();
+            this.workerBy = processApprove.getWorkerBy();
         }
         if (processApprove.getWorkerTo() != null) {
-            this.workerTo = processApprove.getWorkerTo().getId();
+            this.workerTo = processApprove.getWorkerTo();
         }
         if (processApprove.getProcess() != null) {
             this.process = processApprove.getProcess().getId();

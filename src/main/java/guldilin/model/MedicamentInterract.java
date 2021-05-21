@@ -20,4 +20,6 @@ public class MedicamentInterract {
     private Medicament medicament2;
 
     private String description;
+
+    private Boolean canInterract;
 }

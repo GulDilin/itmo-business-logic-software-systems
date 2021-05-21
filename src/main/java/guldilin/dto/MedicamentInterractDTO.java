@@ -15,14 +15,17 @@ public class MedicamentInterractDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
+    @NotNull(message = "medicament1 cannot be null")
     private Long medicament1;
 
-    @NotNull
+    @NotNull(message = "medicament2 cannot be null")
     private Long medicament2;
 
     @NotBlank(message = "Description cannot be blank")
     private String description;
+
+    @NotNull(message = "canInterract cannot be null")
+    private Boolean canInterract;
 
     public MedicamentInterractDTO(MedicamentInterract medicamentInterract) {
         this.id = medicamentInterract.getId();
@@ -33,5 +36,6 @@ public class MedicamentInterractDTO implements Serializable {
             this.medicament2 = medicamentInterract.getMedicament2().getId();
         }
         this.description = medicamentInterract.getDescription();
+        this.canInterract = medicamentInterract.getCanInterract();
     }
 }

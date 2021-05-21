@@ -1,9 +1,7 @@
 package guldilin.service;
 
-import guldilin.dto.MedicamentDTO;
-import guldilin.dto.MedicamentFormulaDTO;
-import guldilin.dto.UpdateMedicamentDTO;
-import guldilin.model.MedicamentFormula;
+import guldilin.dto.*;
+import guldilin.model.MedicamentInterract;
 
 import java.util.List;
 
@@ -14,4 +12,5 @@ public interface MedicamentService {
     MedicamentDTO create(MedicamentDTO medicamentDTO);
     MedicamentDTO update(UpdateMedicamentDTO medicamentDTO);
     MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO);
+//    MedicamentInterractDTO addInteract(Long id);
 }
