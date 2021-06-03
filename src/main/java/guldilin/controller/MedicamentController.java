@@ -50,6 +50,22 @@ public class MedicamentController implements ValidationExceptionHandler {
         return ResponseEntity.ok(medicamentService.getFormula(id));
     }
 
+    @GetMapping(
+            path ="/api/medicaments/{id}/processes",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getProcesses(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentService.getProcesses(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/processes/{processId}/approves",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getProcessApproves(@PathVariable Long id, @PathVariable Long processId) {
+        return ResponseEntity.ok(medicamentService.getProcessesApproves(id, processId));
+    }
+
     @PostMapping(
             path = "/api/medicaments/{id}/formula",
             consumes = MediaType.APPLICATION_JSON_VALUE,

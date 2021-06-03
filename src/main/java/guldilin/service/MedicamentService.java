@@ -13,4 +13,6 @@ public interface MedicamentService {
     MedicamentDTO update(UpdateMedicamentDTO medicamentDTO);
     MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO);
 //    MedicamentInterractDTO addInteract(Long id);
+    List<ProcessDTO> getProcesses(Long id);
+    List<ProcessApproveDTO> getProcessesApproves(Long id, Long processId);
 }

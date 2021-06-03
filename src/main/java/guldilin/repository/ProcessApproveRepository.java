@@ -14,4 +14,5 @@ public interface ProcessApproveRepository extends JpaRepository<ProcessApprove, 
     List<ProcessApprove> findAllByUpdated(Date date);
     List<ProcessApprove> findAllByCreated(Date date);
     List<ProcessApprove> findAllByApproved(Boolean approved);
+    List<ProcessApprove> findAllByProcessId(Long id);
 }

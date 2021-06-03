@@ -1,19 +1,16 @@
 package guldilin.service;
 
-import guldilin.dto.MedicamentDTO;
-import guldilin.dto.MedicamentFormulaDTO;
-import guldilin.dto.UpdateMedicamentDTO;
+import guldilin.dto.*;
 import guldilin.model.Medicament;
 import guldilin.model.MedicamentFormula;
-import guldilin.repository.MedicamentTypeRepository;
-import guldilin.repository.MedicamentFormulaRepository;
-import guldilin.repository.MedicamentGroupRepository;
-import guldilin.repository.MedicamentRepository;
+import guldilin.model.Process;
+import guldilin.model.ProcessApprove;
+import guldilin.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +20,30 @@ public class MedicamentServiceImpl implements MedicamentService {
     private final MedicamentFormulaRepository medicamentFormulaRepository;
     private final MedicamentGroupRepository medicamentGroupRepository;
     private final MedicamentTypeRepository medicamentTypeRepository;
+    private final ProcessRepository processRepository;
+    private final ProcessApproveRepository processApproveRepository;
     private final ModelMapper modelMapper;
+    private final WorkerRoleRepository workerRoleRepository;
 
     @Autowired
-    public MedicamentServiceImpl(MedicamentRepository medicamentRepository, MedicamentFormulaRepository medicamentFormulaRepository, MedicamentGroupRepository medicamentGroupRepository, MedicamentTypeRepository medicamentTypeRepository, ModelMapper modelMapper) {
+    public MedicamentServiceImpl(
+            MedicamentRepository medicamentRepository,
+            MedicamentFormulaRepository medicamentFormulaRepository,
+            MedicamentGroupRepository medicamentGroupRepository,
+            MedicamentTypeRepository medicamentTypeRepository,
+            ProcessRepository processRepository,
+            ProcessApproveRepository processApproveRepository,
+            ModelMapper modelMapper,
+            WorkerRoleRepository workerRoleRepository
+    ) {
         this.medicamentRepository = medicamentRepository;
         this.medicamentFormulaRepository = medicamentFormulaRepository;
         this.medicamentGroupRepository = medicamentGroupRepository;
         this.medicamentTypeRepository = medicamentTypeRepository;
+        this.processRepository = processRepository;
+        this.processApproveRepository = processApproveRepository;
         this.modelMapper = modelMapper;
+        this.workerRoleRepository = workerRoleRepository;
     }
 
     @Override
@@ -71,6 +83,22 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
+    public List<ProcessDTO> getProcesses(Long id) {
+        medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+        return processRepository.findAllByMedicamentId(id).stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProcessApproveDTO> getProcessesApproves(Long id, Long processId) {
+        medicamentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+        getProcesses(id).stream().filter(it -> it.getId().equals(processId)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No such process"));
+        return processApproveRepository.findAllByProcessId(processId).stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO) {
         medicamentFormulaDTO.setId(null);
         Medicament medicament = medicamentRepository.findById(id)
@@ -83,12 +111,25 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
+    @Transactional
     public MedicamentDTO create(MedicamentDTO medicamentDTO) {
         medicamentDTO.setId(null);
         if (medicamentRepository.findAllByTitle(medicamentDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Medicament with title already exists");
         }
-        return mapToDTO(medicamentRepository.save(mapToEntity(medicamentDTO)));
+        Medicament medicament = mapToEntity(medicamentDTO);
+        medicament = medicamentRepository.save(medicament);
+        Process process = new Process();
+        process.setMedicament(medicament);
+        process.setStatus("started");
+        process = processRepository.save(process);
+        Process finalProcess = process;
+        workerRoleRepository.findAll().forEach(role -> {
+            ProcessApprove processApprove = new ProcessApprove();
+            processApprove.setProcess(finalProcess);
+            processApproveRepository.save(processApprove);
+        });
+        return mapToDTO(medicament);
     }
 
     @Override
@@ -109,23 +150,27 @@ public class MedicamentServiceImpl implements MedicamentService {
         if (newMedicament.getGroup() != null) {
             medicament.setGroup(newMedicament.getGroup());
         }
-        return  mapToDTO(medicamentRepository.save(medicament));
+        return mapToDTO(medicamentRepository.save(medicament));
     }
 
     private MedicamentDTO mapToDTO(Medicament medicament) {
         return new MedicamentDTO(medicament);
     }
+
+    private ProcessDTO mapToDTO(Process process) {
+        return new ProcessDTO(process);
+    }
+
+    private ProcessApproveDTO mapToDTO(ProcessApprove processApprove) {
+        return new ProcessApproveDTO(processApprove);
+    }
+
     private MedicamentFormulaDTO mapToDTO(MedicamentFormula medicamentFormula) {
         return modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
     }
 
     private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
         Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
-//        if (medicamentDTO.getFormula() != null) {
-//            medicament.setFormula(
-//                    medicamentFormulaRepository.findById(medicamentDTO.getFormula())
-//                            .orElseThrow(() -> new IllegalArgumentException("No such formula")));
-//        }
         if (medicamentDTO.getGroup() != null) {
             medicament.setGroup(
                     medicamentGroupRepository.findById(medicamentDTO.getGroup())

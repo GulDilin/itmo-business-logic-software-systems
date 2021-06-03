@@ -4,6 +4,7 @@ import guldilin.config.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,20 +32,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/resources/css/*").permitAll()
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/register").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/*").hasAnyAuthority("ADMIN", "MANAGER", "EDITOR", "MAIN_EDITOR", "FARM")
                 .antMatchers("/api/workers").hasAnyAuthority("ADMIN", "MANAGER")
-                .antMatchers("/api/workers").hasAnyAuthority("ADMIN", "MANAGER")
+                .antMatchers(HttpMethod.POST,"/api/formula", "/api/medicaments/*/formula").hasAnyAuthority("ADMIN", "FARM")
+                .antMatchers(HttpMethod.PATCH,"/api/formula", "/api/medicaments/*/formula").hasAnyAuthority("ADMIN", "FARM")
+                .antMatchers(HttpMethod.POST,"/api/medicaments").hasAnyAuthority("ADMIN", "EDITOR", "MAIN_EDITOR")
+                .antMatchers(HttpMethod.PATCH, "/api/medicaments").hasAnyAuthority("ADMIN", "EDITOR", "MAIN_EDITOR")
+                .antMatchers(HttpMethod.POST,"/api/process").hasAnyAuthority("ADMIN", "EDITOR", "MAIN_EDITOR", "MANAGER")
+                .antMatchers(HttpMethod.PATCH, "/api/process").hasAnyAuthority("ADMIN", "EDITOR", "MAIN_EDITOR", "MANAGER")
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
-                .logout()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
