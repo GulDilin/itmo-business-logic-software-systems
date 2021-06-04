@@ -1,0 +1,77 @@
+version: "3"
+services:
+  rabbit-mq-blps:
+    restart: always
+    image: rabbitmq
+    container_name: rabbit-mq-blps
+    ports:
+      - 8001:15672
+      - 8011:25672
+      - 8002:5672
+    volumes:
+      - ../../rabbitmq/:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=rabbit-mq-blps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  wildfly-blps:
+    restart: always
+    build:
+      context: ../wildfly-admin
+    container_name: wildfly-blps
+    ports:
+      - 9990:9990
+      - 8080:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  db-blps:
+    restart: always
+    image: postgres:11
+    ports:
+      - "8004:5432"
+    environment:
+      - POSTGRES_DB=blps_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=blps_lab
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - ../../blps-db:/var/lib/postgresql/data
+
+  web-blps:
+    restart: "no"
+    build:
+      context: ../
+    volumes:
+      - ../:/app
+    depends_on:
+      - wildfly-blps
+      - db-blps
+      - rabbit-mq-blps
+    links:
+      - wildfly-blps
+      - db-blps
+      - rabbit-mq-blps
+    environment:
+      - WILDFLY_HOST=wildfly-blps
+      - WILDFLY_PORT=9990
+      - WILDFLY_USERNAME=admin
+      - WILDFLY_PASSWORD=admin
+      - POSTGRES_DB=blps_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=blps_lab
+      - POSTGRES_HOST=db-blps
+      - POSTGRES_PORT=5432
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_HOST=rabbit-mq-blps
+      - RABBITMQ_VIRTUALHOST=rabbit-mq-blps
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_TIMEOUT=1000

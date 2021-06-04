@@ -1,8 +1,9 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.ActiveSubstanceDTO;
 import guldilin.model.ActiveSubstance;
 import guldilin.repository.ActiveSubstanceRepository;
+import guldilin.service.interfaces.ActiveSubstanceService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

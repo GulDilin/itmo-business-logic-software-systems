@@ -1,6 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.MedicamentGroupDTO;
+import guldilin.service.interfaces.MedicamentGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,10 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentGroupController implements ValidationExceptionHandler {
 
-    private final guldilin.service.MedicamentGroupService medicamentGroupService;
+    private final MedicamentGroupService medicamentGroupService;
 
     @Autowired
-    public MedicamentGroupController(guldilin.service.MedicamentGroupService medicamentGroupService) {
+    public MedicamentGroupController(MedicamentGroupService medicamentGroupService) {
         this.medicamentGroupService = medicamentGroupService;
     }
 

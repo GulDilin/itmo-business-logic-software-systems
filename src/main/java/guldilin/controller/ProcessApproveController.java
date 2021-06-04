@@ -3,7 +3,7 @@ package guldilin.controller;
 import guldilin.dto.ProcessApproveDTO;
 import guldilin.model.Worker;
 import guldilin.repository.WorkerRepository;
-import guldilin.service.ProcessApproveService;
+import guldilin.service.interfaces.ProcessApproveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

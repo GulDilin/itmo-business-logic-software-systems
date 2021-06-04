@@ -1,4 +1,4 @@
-package guldilin.service;
+package guldilin.service.interfaces;
 
 import guldilin.dto.VendorDTO;
 

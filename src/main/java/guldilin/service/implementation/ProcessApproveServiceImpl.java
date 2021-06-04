@@ -1,10 +1,11 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.ProcessApproveDTO;
 import guldilin.model.ProcessApprove;
 import guldilin.repository.ProcessApproveRepository;
 import guldilin.repository.ProcessRepository;
 import guldilin.repository.WorkerRepository;
+import guldilin.service.interfaces.ProcessApproveService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;

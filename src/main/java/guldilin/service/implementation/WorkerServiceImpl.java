@@ -1,10 +1,11 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.WorkerDTO;
 import guldilin.dto.WorkerRegistrationRequestDTO;
 import guldilin.model.Worker;
 import guldilin.repository.WorkerRepository;
 import guldilin.repository.WorkerRoleRepository;
+import guldilin.service.interfaces.WorkerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

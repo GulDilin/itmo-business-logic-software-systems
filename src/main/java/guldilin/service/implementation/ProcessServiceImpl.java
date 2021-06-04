@@ -1,9 +1,10 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.ProcessDTO;
 import guldilin.model.Process;
 import guldilin.repository.MedicamentRepository;
 import guldilin.repository.ProcessRepository;
+import guldilin.service.interfaces.ProcessService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

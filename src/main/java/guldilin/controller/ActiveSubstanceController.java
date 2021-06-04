@@ -1,6 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.ActiveSubstanceDTO;
+import guldilin.service.interfaces.ActiveSubstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,10 @@ import javax.validation.Valid;
 @RestController
 public class ActiveSubstanceController implements ValidationExceptionHandler {
 
-    private final guldilin.service.ActiveSubstanceService activeSubstanceService;
+    private final ActiveSubstanceService activeSubstanceService;
 
     @Autowired
-    public ActiveSubstanceController(guldilin.service.ActiveSubstanceService activeSubstanceService) {
+    public ActiveSubstanceController(ActiveSubstanceService activeSubstanceService) {
         this.activeSubstanceService = activeSubstanceService;
     }
 

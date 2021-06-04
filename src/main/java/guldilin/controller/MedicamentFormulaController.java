@@ -1,6 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.MedicamentFormulaDTO;
+import guldilin.service.interfaces.MedicamentFormulaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,10 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentFormulaController implements ValidationExceptionHandler {
 
-    private final guldilin.service.MedicamentFormulaService medicamentFormulaService;
+    private final MedicamentFormulaService medicamentFormulaService;
 
     @Autowired
-    public MedicamentFormulaController(guldilin.service.MedicamentFormulaService medicamentFormulaService) {
+    public MedicamentFormulaController(MedicamentFormulaService medicamentFormulaService) {
         this.medicamentFormulaService = medicamentFormulaService;
     }
 

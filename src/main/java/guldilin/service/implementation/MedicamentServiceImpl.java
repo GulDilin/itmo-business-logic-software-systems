@@ -1,4 +1,4 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.*;
 import guldilin.model.Medicament;
@@ -6,6 +6,7 @@ import guldilin.model.MedicamentFormula;
 import guldilin.model.Process;
 import guldilin.model.ProcessApprove;
 import guldilin.repository.*;
+import guldilin.service.interfaces.MedicamentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

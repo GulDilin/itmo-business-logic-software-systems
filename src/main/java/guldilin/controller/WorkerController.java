@@ -1,13 +1,9 @@
 package guldilin.controller;
 
-import guldilin.dto.WorkerDTO;
-import guldilin.service.WorkerService;
+import guldilin.service.interfaces.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 
 @RestController

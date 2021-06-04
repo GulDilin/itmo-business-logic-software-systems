@@ -1,8 +1,9 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.WorkerRoleDTO;
 import guldilin.model.WorkerRole;
 import guldilin.repository.WorkerRoleRepository;
+import guldilin.service.interfaces.WorkerRoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

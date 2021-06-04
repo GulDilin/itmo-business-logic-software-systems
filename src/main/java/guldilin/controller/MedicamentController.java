@@ -3,6 +3,8 @@ package guldilin.controller;
 import guldilin.dto.MedicamentDTO;
 import guldilin.dto.MedicamentFormulaDTO;
 import guldilin.dto.UpdateMedicamentDTO;
+import guldilin.service.interfaces.MedicamentService;
+import guldilin.service.interfaces.MedicamentVendorInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +16,16 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentController implements ValidationExceptionHandler {
 
-    private final guldilin.service.MedicamentService medicamentService;
+    private final MedicamentService medicamentService;
+    private final MedicamentVendorInfoService medicamentVendorInfoService;
 
     @Autowired
-    public MedicamentController(guldilin.service.MedicamentService medicamentService) {
+    public MedicamentController(
+            MedicamentService medicamentService,
+            MedicamentVendorInfoService medicamentVendorInfoService
+    ) {
         this.medicamentService = medicamentService;
+        this.medicamentVendorInfoService = medicamentVendorInfoService;
     }
 
     @GetMapping(
@@ -56,6 +63,14 @@ public class MedicamentController implements ValidationExceptionHandler {
     )
     public ResponseEntity<Object> getProcesses(@PathVariable Long id) {
         return ResponseEntity.ok(medicamentService.getProcesses(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/vendor_info",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getVendorInfo(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentVendorInfoService.get(id));
     }
 
     @GetMapping(

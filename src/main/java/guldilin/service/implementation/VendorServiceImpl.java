@@ -1,8 +1,9 @@
-package guldilin.service;
+package guldilin.service.implementation;
 
 import guldilin.dto.VendorDTO;
 import guldilin.model.Vendor;
 import guldilin.repository.VendorRepository;
+import guldilin.service.interfaces.VendorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

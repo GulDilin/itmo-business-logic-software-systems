@@ -1,7 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.ProcessDTO;
-import guldilin.service.ProcessService;
+import guldilin.service.interfaces.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import javax.validation.Valid;
 @RestController
 public class ProcessController implements ValidationExceptionHandler {
 
-    private final guldilin.service.ProcessService processService;
+    private final ProcessService processService;
 
     @Autowired
     public ProcessController(ProcessService processService) {
