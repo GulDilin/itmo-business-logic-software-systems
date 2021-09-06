@@ -1,7 +1,10 @@
 package guldilin.controller;
 
 import guldilin.dto.MedicamentDTO;
+import guldilin.dto.MedicamentFormulaDTO;
 import guldilin.dto.UpdateMedicamentDTO;
+import guldilin.service.interfaces.MedicamentService;
+import guldilin.service.interfaces.MedicamentVendorInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +16,16 @@ import javax.validation.Valid;
 @RestController
 public class MedicamentController implements ValidationExceptionHandler {
 
-    private final guldilin.service.MedicamentService MedicamentService;
+    private final MedicamentService medicamentService;
+    private final MedicamentVendorInfoService medicamentVendorInfoService;
 
     @Autowired
-    public MedicamentController(guldilin.service.MedicamentService MedicamentService) {
-        this.MedicamentService = MedicamentService;
+    public MedicamentController(
+            MedicamentService medicamentService,
+            MedicamentVendorInfoService medicamentVendorInfoService
+    ) {
+        this.medicamentService = medicamentService;
+        this.medicamentVendorInfoService = medicamentVendorInfoService;
     }
 
     @GetMapping(
@@ -30,15 +38,56 @@ public class MedicamentController implements ValidationExceptionHandler {
             @RequestParam(required = false) Long formulaId,
             @RequestParam(required = false) Long activeSubstanceId
     ) {
-        return ResponseEntity.ok(MedicamentService.getAll(title, groupId, formulaId, activeSubstanceId));
+        return ResponseEntity.ok(medicamentService.getAll(title, groupId, formulaId, activeSubstanceId));
     }
 
     @GetMapping(
             path ="/api/medicaments/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> get(@PathVariable Integer id) {
-        return ResponseEntity.ok(MedicamentService.get(id));
+    public ResponseEntity<Object> get(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentService.get(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/formula",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getFormula(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentService.getFormula(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/processes",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getProcesses(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentService.getProcesses(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/vendor_info",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getVendorInfo(@PathVariable Long id) {
+        return ResponseEntity.ok(medicamentVendorInfoService.get(id));
+    }
+
+    @GetMapping(
+            path ="/api/medicaments/{id}/processes/{processId}/approves",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getProcessApproves(@PathVariable Long id, @PathVariable Long processId) {
+        return ResponseEntity.ok(medicamentService.getProcessesApproves(id, processId));
+    }
+
+    @PostMapping(
+            path = "/api/medicaments/{id}/formula",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> create(@PathVariable Long id, @RequestBody @Valid MedicamentFormulaDTO medicamentFormulaDTO) {
+        return ResponseEntity.ok(medicamentService.createFormula(id ,medicamentFormulaDTO));
     }
 
     @PatchMapping(
@@ -48,7 +97,7 @@ public class MedicamentController implements ValidationExceptionHandler {
     )
     public ResponseEntity<Object> patch(@PathVariable Long id, @RequestBody UpdateMedicamentDTO medicamentDTO) {
         medicamentDTO.setId(id);
-        return ResponseEntity.ok(MedicamentService.update(medicamentDTO));
+        return ResponseEntity.ok(medicamentService.update(medicamentDTO));
     }
 
     @PostMapping(
@@ -56,7 +105,7 @@ public class MedicamentController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentDTO MedicamentDTO) {
-        return ResponseEntity.ok(MedicamentService.create(MedicamentDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid MedicamentDTO medicamentDTO) {
+        return ResponseEntity.ok(medicamentService.create(medicamentDTO));
     }
 }

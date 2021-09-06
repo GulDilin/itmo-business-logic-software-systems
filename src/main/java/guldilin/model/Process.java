@@ -1,8 +1,13 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Process {
 
     @Id
@@ -14,27 +19,4 @@ public class Process {
     @ManyToOne(fetch = FetchType.LAZY)
     private Medicament medicament;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Medicament getMedicament() {
-        return medicament;
-    }
-
-    public void setMedicament(Medicament medicament) {
-        this.medicament = medicament;
-    }
 }

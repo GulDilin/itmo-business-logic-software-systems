@@ -1,5 +1,9 @@
 # Buisness Logic of Programming Systems Lab 1
 
+### Run
+```shell
+docker run -d --hostname rabbit-mg-blps --name rabbit-mg-blps rabbitmq:3
+```
 
 ### Reference Documentation
 For further reference, please consider the following sections:

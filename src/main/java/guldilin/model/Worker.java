@@ -1,15 +1,20 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Worker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  String name;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private WorkerRole role;
@@ -18,43 +23,10 @@ public class Worker {
 
     private String email;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(nullable = false, unique = true)
+    private String login;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(nullable = false)
+    private String password;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public WorkerRole getRole() {
-        return role;
-    }
-
-    public void setRole(WorkerRole role) {
-        this.role = role;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

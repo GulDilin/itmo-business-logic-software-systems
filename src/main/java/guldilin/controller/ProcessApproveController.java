@@ -1,10 +1,13 @@
 package guldilin.controller;
 
 import guldilin.dto.ProcessApproveDTO;
-import guldilin.service.ProcessApproveService;
+import guldilin.model.Worker;
+import guldilin.repository.WorkerRepository;
+import guldilin.service.interfaces.ProcessApproveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,10 +18,15 @@ import java.util.List;
 public class ProcessApproveController implements ValidationExceptionHandler {
 
     private final ProcessApproveService processApproveService;
+    private final WorkerRepository workerRepository;
 
     @Autowired
-    public ProcessApproveController(guldilin.service.ProcessApproveService ProcessApproveService) {
-        this.processApproveService = ProcessApproveService;
+    public ProcessApproveController(
+            ProcessApproveService processApproveService,
+            WorkerRepository workerRepository
+    ) {
+        this.processApproveService = processApproveService;
+        this.workerRepository = workerRepository;
     }
 
     @GetMapping("/api/approve")
@@ -42,8 +50,12 @@ public class ProcessApproveController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO ProcessApproveDTO) {
-        return ResponseEntity.ok(processApproveService.create(ProcessApproveDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid ProcessApproveDTO processApproveDTO, Authentication authentication) {
+        Worker worker = workerRepository.findByLogin(authentication.getName()).orElseThrow(
+                () -> new IllegalArgumentException("Cant find worker")
+        );
+        processApproveDTO.setWorkerBy(worker.getId());
+        return ResponseEntity.ok(processApproveService.create(processApproveDTO));
 
     }
 

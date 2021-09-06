@@ -1,10 +1,17 @@
 package guldilin.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import guldilin.model.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
-public class MedicamentDTO {
+@Data
+@NoArgsConstructor
+@JsonSerialize
+public class MedicamentDTO implements Serializable {
 
     private Long id;
 
@@ -13,11 +20,7 @@ public class MedicamentDTO {
 
     private Long group;
 
-    private Long formula;
-
     private Long medicamentClass;
-
-    public MedicamentDTO() {}
 
     public MedicamentDTO(Medicament medicament) {
         this.id = medicament.getId();
@@ -25,51 +28,8 @@ public class MedicamentDTO {
         if (medicament.getGroup() != null){
             this.group = medicament.getGroup().getId();
         }
-        if (medicament.getFormula() != null) {
-            this.formula = medicament.getFormula().getId();
+        if (medicament.getMedicamentType() != null) {
+            this.medicamentClass = medicament.getMedicamentType().getId();
         }
-        if (medicament.getMedicamentClass() != null) {
-            this.medicamentClass = medicament.getMedicamentClass().getId();
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Long getGroup() {
-        return group;
-    }
-
-    public void setGroup(Long group) {
-        this.group = group;
-    }
-
-    public Long getFormula() {
-        return formula;
-    }
-
-    public void setFormula(Long formula) {
-        this.formula = formula;
-    }
-
-    public Long getMedicamentClass() {
-        return medicamentClass;
-    }
-
-    public void setMedicamentClass(Long medicamentClass) {
-        this.medicamentClass = medicamentClass;
     }
 }

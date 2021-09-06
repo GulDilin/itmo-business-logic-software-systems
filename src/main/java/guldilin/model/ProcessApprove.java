@@ -1,9 +1,14 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class ProcessApprove {
 
     @Id
@@ -12,11 +17,9 @@ public class ProcessApprove {
 
     private Integer level;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Worker workerBy;
+    private Long workerBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Worker workerTo;
+    private Long workerTo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Process process;
@@ -27,67 +30,5 @@ public class ProcessApprove {
 
     private Boolean approved;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Worker getWorkerBy() {
-        return workerBy;
-    }
-
-    public void setWorkerBy(Worker workerBy) {
-        this.workerBy = workerBy;
-    }
-
-    public Worker getWorkerTo() {
-        return workerTo;
-    }
-
-    public void setWorkerTo(Worker workerTo) {
-        this.workerTo = workerTo;
-    }
-
-    public Process getProcess() {
-        return process;
-    }
-
-    public void setProcess(Process process) {
-        this.process = process;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
 }

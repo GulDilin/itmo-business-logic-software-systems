@@ -1,73 +1,41 @@
 package guldilin.dto;
 
 import guldilin.model.Worker;
+import guldilin.model.WorkerRole;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
 public class WorkerDTO implements Serializable {
     private Long id;
 
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    @NotNull(message = "Role cannot be null")
-    private Long role;
+    @NotBlank(message = "Role cannot be blank")
+    private String role;
 
     private String phone;
 
     private String email;
 
-    WorkerDTO() {}
+    @NotBlank(message = "login cannot be blank")
+    private String login;
 
     public WorkerDTO(Worker worker) {
         this.id = worker.getId();
         this.name = worker.getName();
         if (worker.getRole() != null) {
-            this.role = worker.getRole().getId();
+            this.role = worker.getRole().getTitle();
         }
         this.phone = worker.getPhone();
         this.email = worker.getEmail();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getRole() {
-        return role;
-    }
-
-    public void setRole(Long role) {
-        this.role = role;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.login = worker.getLogin();
     }
 }

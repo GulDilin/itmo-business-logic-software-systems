@@ -1,18 +1,23 @@
 package guldilin.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class WorkerRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     @NotNull
     private String title;
 
@@ -22,35 +27,5 @@ public class WorkerRole {
     @OneToMany(fetch = FetchType.LAZY)
     private Collection<Worker> workerList = new ArrayList<>();
 
-    public Collection<Worker> getWorkerList() {
-        return workerList;
-    }
 
-    public void setWorkerList(Collection<Worker> workerList) {
-        this.workerList = workerList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
 }

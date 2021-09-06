@@ -1,6 +1,7 @@
 package guldilin.controller;
 
 import guldilin.dto.ActiveSubstanceDTO;
+import guldilin.service.interfaces.ActiveSubstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,11 @@ import javax.validation.Valid;
 @RestController
 public class ActiveSubstanceController implements ValidationExceptionHandler {
 
-    private final guldilin.service.ActiveSubstanceService ActiveSubstanceService;
+    private final ActiveSubstanceService activeSubstanceService;
 
     @Autowired
-    public ActiveSubstanceController(guldilin.service.ActiveSubstanceService ActiveSubstanceService) {
-        this.ActiveSubstanceService = ActiveSubstanceService;
+    public ActiveSubstanceController(ActiveSubstanceService activeSubstanceService) {
+        this.activeSubstanceService = activeSubstanceService;
     }
 
     @GetMapping("/api/substances")
@@ -23,12 +24,12 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String description
     ) {
-        return ResponseEntity.ok(ActiveSubstanceService.getAll(title, description));
+        return ResponseEntity.ok(activeSubstanceService.getAll(title, description));
     }
 
     @GetMapping("/api/substances/{id}")
     public ResponseEntity<Object> get(@PathVariable Integer id) {
-        return ResponseEntity.ok(ActiveSubstanceService.get(id));
+        return ResponseEntity.ok(activeSubstanceService.get(id));
     }
 
     @PostMapping(
@@ -36,7 +37,7 @@ public class ActiveSubstanceController implements ValidationExceptionHandler {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> create(@RequestBody @Valid ActiveSubstanceDTO ActiveSubstanceDTO) {
-        return ResponseEntity.ok(ActiveSubstanceService.create(ActiveSubstanceDTO));
+    public ResponseEntity<Object> create(@RequestBody @Valid ActiveSubstanceDTO activeSubstanceDTO) {
+        return ResponseEntity.ok(activeSubstanceService.create(activeSubstanceDTO));
     }
 }
