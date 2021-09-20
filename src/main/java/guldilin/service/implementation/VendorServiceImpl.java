@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,18 +24,11 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public List<VendorDTO> getAll(String title, String address, String contact) {
-        List<Vendor> workerList;
-
-        if (title != null) {
-            workerList = vendorRepository.findAllByTitle(title);
-        } else if (address != null) {
-            workerList = vendorRepository.findAllByAddress(address);
-        } else if (contact != null) {
-            workerList = vendorRepository.findAllByContact(contact);
-        } else {
-            workerList = vendorRepository.findAll();
-        }
-        return workerList.stream()
+        return vendorRepository.findAll()
+                .stream()
+                .filter(e -> title == null || e.getTitle().equals(title))
+                .filter(e -> address == null || e.getAddress().equals(address))
+                .filter(e -> contact == null || e.getContact().equals(contact))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
@@ -44,11 +36,8 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public VendorDTO get(Integer id) {
-        Optional<Vendor> found = vendorRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such vendor");
+        return mapToDTO(vendorRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new IllegalArgumentException("No such vendor")));
     }
 
     @Override
