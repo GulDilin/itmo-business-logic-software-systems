@@ -2,6 +2,7 @@ package guldilin.service.implementation;
 
 import guldilin.dto.MedicamentVendorInfoDTO;
 import guldilin.dto.MedicamentlVendorInfoQueueTaskDTO;
+import guldilin.exceptions.NoSuchObject;
 import guldilin.model.MedicamentVendorInfo;
 import guldilin.repository.MedicamentRepository;
 import guldilin.repository.MedicamentVendorInfoRepository;
@@ -18,7 +19,6 @@ import java.util.Optional;
 public class MedicamentVendorInfoServiceImpl implements MedicamentVendorInfoService {
     private final MedicamentVendorInfoRepository medicamentVendorInfoRepository;
     private final MedicamentRepository medicamentRepository;
-    private final ModelMapper modelMapper;
     private final AmqpTemplate template;
     private final Queue queue;
 
@@ -26,19 +26,18 @@ public class MedicamentVendorInfoServiceImpl implements MedicamentVendorInfoServ
     public MedicamentVendorInfoServiceImpl(
             MedicamentVendorInfoRepository medicamentVendorInfoRepository,
             MedicamentRepository medicamentRepository,
-            ModelMapper modelMapper,
             AmqpTemplate template,
             Queue queue
     ) {
         this.medicamentVendorInfoRepository = medicamentVendorInfoRepository;
         this.medicamentRepository = medicamentRepository;
-        this.modelMapper = modelMapper;
         this.template = template;
         this.queue = queue;
     }
 
-    public MedicamentVendorInfoDTO get(Long medicamentId) {
-        medicamentRepository.findById(medicamentId).orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+    public MedicamentVendorInfoDTO get(Long medicamentId) throws NoSuchObject {
+        medicamentRepository.findById(medicamentId)
+                .orElseThrow(() -> new NoSuchObject(MedicamentVendorInfo.class.getName()));
         Optional<MedicamentVendorInfo> medicamentVendorInfo = medicamentVendorInfoRepository.findByMedicamentId(medicamentId);
         if (medicamentVendorInfo.isPresent()) return mapToDTO(medicamentVendorInfo.get());
 

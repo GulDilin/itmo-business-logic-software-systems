@@ -1,6 +1,8 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.WorkerRoleDTO;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.exceptions.ObjectAlreadyExists;
 import guldilin.model.WorkerRole;
 import guldilin.repository.WorkerRoleRepository;
 import guldilin.service.interfaces.WorkerRoleService;
@@ -25,33 +27,24 @@ public class WorkerRoleServiceImpl implements WorkerRoleService {
 
     @Override
     public List<WorkerRoleDTO> getAll(String title, Integer level) {
-        List<WorkerRole> workerRoleList;
-
-        if (title != null) {
-            workerRoleList = workerRoleRepository.findAllByTitle(title);
-        } else if (level != null) {
-            workerRoleList = workerRoleRepository.findAllByLevel(level);
-        } else {
-            workerRoleList = workerRoleRepository.findAll();
-        }
-        return workerRoleList.stream()
+        return workerRoleRepository.findAll()
+                .stream()
+                .filter(w -> title == null || w.getTitle().equals(title))
+                .filter(w -> level == null || w.getLevel().equals(level))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public WorkerRoleDTO get(Integer id) {
-        Optional<WorkerRole> found = workerRoleRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such role");
+    public WorkerRoleDTO get(Integer id) throws NoSuchObject {
+        return mapToDTO(workerRoleRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NoSuchObject(WorkerRole.class.getName())));
     }
 
     @Override
-    public WorkerRoleDTO create(WorkerRoleDTO workerRoleDTO) {
+    public WorkerRoleDTO create(WorkerRoleDTO workerRoleDTO) throws ObjectAlreadyExists {
         if (workerRoleRepository.findAllByTitle(workerRoleDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Role with title already exists");
+            throw new ObjectAlreadyExists(WorkerRole.class.getName());
         }
         return mapToDTO(workerRoleRepository.save(mapToEntity(workerRoleDTO)));
     }

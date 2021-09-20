@@ -1,10 +1,9 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.*;
-import guldilin.model.Medicament;
-import guldilin.model.MedicamentFormula;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.model.*;
 import guldilin.model.Process;
-import guldilin.model.ProcessApprove;
 import guldilin.repository.*;
 import guldilin.service.interfaces.MedicamentService;
 import org.modelmapper.ModelMapper;
@@ -49,20 +48,16 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     public List<MedicamentDTO> getAll(String title, Long groupId, Long formulaId, Long activeSubstanceId) {
-        List<Medicament> MedicamentList;
-
-        if (title != null) {
-            MedicamentList = medicamentRepository.findAllByTitle(title);
-        } else if (groupId != null) {
-            MedicamentList = medicamentRepository.findAllByGroupId(groupId);
-        } else if (formulaId != null) {
-            MedicamentList = medicamentRepository.findAllByFormulaId(formulaId);
-        } else if (activeSubstanceId != null) {
-            MedicamentList = medicamentRepository.findAllByActiveSubstancesId(activeSubstanceId);
-        } else {
-            MedicamentList = medicamentRepository.findAll();
-        }
-        return MedicamentList.stream()
+        return medicamentRepository.findAll()
+                .stream()
+                .filter(e -> title == null || e.getTitle().equals(title))
+                .filter(e -> groupId == null || e.getGroup().getId().equals(groupId))
+                .filter(e -> formulaId == null || e.getFormula().getId().equals(formulaId))
+                .filter(e -> activeSubstanceId == null || e.getActiveSubstances()
+                        .stream()
+                        .map(ActiveSubstance::getId)
+                        .anyMatch(l -> l.equals(formulaId))
+                )
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
@@ -74,36 +69,45 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public MedicamentFormulaDTO getFormula(Long id) {
+    public MedicamentFormulaDTO getFormula(Long id) throws NoSuchObject {
         Medicament medicament = medicamentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+                .orElseThrow(() -> new NoSuchObject(Medicament.class.getName()));
         if (medicament.getFormula() == null) {
-            throw new IllegalArgumentException("Formula not found");
+            throw new NoSuchObject(MedicamentFormula.class.getName());
         }
         return new MedicamentFormulaDTO(medicament.getFormula());
     }
 
     @Override
-    public List<ProcessDTO> getProcesses(Long id) {
+    public List<ProcessDTO> getProcesses(Long id) throws NoSuchObject {
         medicamentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
-        return processRepository.findAllByMedicamentId(id).stream().map(this::mapToDTO).collect(Collectors.toList());
+                .orElseThrow(() -> new NoSuchObject(Medicament.class.getName()));
+        return processRepository.findAllByMedicamentId(id)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProcessApproveDTO> getProcessesApproves(Long id, Long processId) {
+    public List<ProcessApproveDTO> getProcessesApproves(Long id, Long processId) throws NoSuchObject {
         medicamentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
-        getProcesses(id).stream().filter(it -> it.getId().equals(processId)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such process"));
-        return processApproveRepository.findAllByProcessId(processId).stream().map(this::mapToDTO).collect(Collectors.toList());
+                .orElseThrow(() -> new NoSuchObject(Medicament.class.getName()));
+        getProcesses(id)
+                .stream()
+                .filter(it -> it.getId().equals(processId))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchObject(Process.class.getName()));
+        return processApproveRepository.findAllByProcessId(processId)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO) {
+    public MedicamentFormulaDTO createFormula(Long id, MedicamentFormulaDTO medicamentFormulaDTO) throws NoSuchObject {
         medicamentFormulaDTO.setId(null);
         Medicament medicament = medicamentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+                .orElseThrow(() -> new NoSuchObject(Medicament.class.getName()));
         MedicamentFormula medicamentFormula = mapToEntity(medicamentFormulaDTO);
         medicamentFormulaRepository.save(medicamentFormula);
         medicament.setFormula(medicamentFormula);
@@ -113,7 +117,7 @@ public class MedicamentServiceImpl implements MedicamentService {
 
     @Override
     @Transactional
-    public MedicamentDTO create(MedicamentDTO medicamentDTO) {
+    public MedicamentDTO create(MedicamentDTO medicamentDTO) throws NoSuchObject {
         medicamentDTO.setId(null);
         if (medicamentRepository.findAllByTitle(medicamentDTO.getTitle()).size() > 0) {
             throw new IllegalArgumentException("Medicament with title already exists");
@@ -134,9 +138,9 @@ public class MedicamentServiceImpl implements MedicamentService {
     }
 
     @Override
-    public MedicamentDTO update(UpdateMedicamentDTO updateMedicamentDTO) {
+    public MedicamentDTO update(UpdateMedicamentDTO updateMedicamentDTO) throws NoSuchObject {
         Medicament medicament = medicamentRepository.findById(updateMedicamentDTO.getId())
-                .orElseThrow(() -> new IllegalArgumentException("No such medicament"));
+                .orElseThrow(() -> new NoSuchObject(Medicament.class.getName()));
 
         Medicament newMedicament = mapToEntity(updateMedicamentDTO);
         if (updateMedicamentDTO.getTitle() != null) {
@@ -170,17 +174,17 @@ public class MedicamentServiceImpl implements MedicamentService {
         return modelMapper.map(medicamentFormula, MedicamentFormulaDTO.class);
     }
 
-    private Medicament mapToEntity(MedicamentDTO medicamentDTO) {
+    private Medicament mapToEntity(MedicamentDTO medicamentDTO) throws NoSuchObject {
         Medicament medicament = modelMapper.map(medicamentDTO, Medicament.class);
         if (medicamentDTO.getGroup() != null) {
             medicament.setGroup(
                     medicamentGroupRepository.findById(medicamentDTO.getGroup())
-                            .orElseThrow(() -> new IllegalArgumentException("No such medical group")));
+                            .orElseThrow(() -> new NoSuchObject(MedicamentGroup.class.getName())));
         }
         if (medicamentDTO.getMedicamentClass() != null) {
             medicament.setMedicamentType(
                     medicamentTypeRepository.findById(medicamentDTO.getMedicamentClass())
-                            .orElseThrow(() -> new IllegalArgumentException("No such medical class")));
+                            .orElseThrow(() -> new NoSuchObject(Medicament.class.getName())));
         }
         return medicament;
     }

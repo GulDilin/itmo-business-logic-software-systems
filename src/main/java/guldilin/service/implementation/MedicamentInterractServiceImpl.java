@@ -1,7 +1,9 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.MedicamentInterractDTO;
+import guldilin.exceptions.NoSuchObject;
 import guldilin.model.MedicamentInterract;
+import guldilin.model.Worker;
 import guldilin.repository.MedicamentInterractRepository;
 import guldilin.repository.MedicamentRepository;
 import guldilin.service.interfaces.MedicamentInterractService;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,16 +42,13 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
     }
 
     @Override
-    public MedicamentInterractDTO get(Integer id) {
-        Optional<MedicamentInterract> found = medicamentInterractRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such medicament interaction");
+    public MedicamentInterractDTO get(Integer id) throws NoSuchObject {
+        return mapToDTO(medicamentInterractRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NoSuchObject(MedicamentInterract.class.getName())));
     }
 
     @Override
-    public MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO) {
+    public MedicamentInterractDTO create(MedicamentInterractDTO medicamentInterractDTO) throws NoSuchObject {
         medicamentInterractDTO.setId(null);
         return mapToDTO(medicamentInterractRepository.save(mapToEntity(medicamentInterractDTO)));
     }
@@ -59,17 +57,17 @@ public class MedicamentInterractServiceImpl implements MedicamentInterractServic
         return new MedicamentInterractDTO(medicamentInterract);
     }
 
-    private MedicamentInterract mapToEntity(MedicamentInterractDTO medicamentInterractDTO) {
+    private MedicamentInterract mapToEntity(MedicamentInterractDTO medicamentInterractDTO) throws NoSuchObject {
         MedicamentInterract medicamentInterract = modelMapper.map(medicamentInterractDTO, MedicamentInterract.class);
         if (medicamentInterractDTO.getMedicament1() != null) {
             medicamentInterract.setMedicament1(
                     medicamentRepository.findById(medicamentInterractDTO.getMedicament1())
-                            .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 1")));
+                            .orElseThrow(() -> new NoSuchObject(Worker.class.getName())));
         }
         if (medicamentInterractDTO.getMedicament2() != null) {
             medicamentInterract.setMedicament2(
                     medicamentRepository.findById(medicamentInterractDTO.getMedicament2())
-                            .orElseThrow(() -> new IllegalArgumentException("No such worker medicament 2")));
+                            .orElseThrow(() -> new NoSuchObject(Worker.class.getName())));
         }
 
         return medicamentInterract;

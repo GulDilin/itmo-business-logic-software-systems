@@ -1,6 +1,8 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.VendorDTO;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.exceptions.ObjectAlreadyExists;
 import guldilin.model.Vendor;
 import guldilin.repository.VendorRepository;
 import guldilin.service.interfaces.VendorService;
@@ -35,15 +37,15 @@ public class VendorServiceImpl implements VendorService {
 
 
     @Override
-    public VendorDTO get(Integer id) {
+    public VendorDTO get(Integer id) throws NoSuchObject {
         return mapToDTO(vendorRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new IllegalArgumentException("No such vendor")));
+                .orElseThrow(() -> new NoSuchObject(Vendor.class.getName())));
     }
 
     @Override
-    public VendorDTO create(VendorDTO vendorDTO) {
+    public VendorDTO create(VendorDTO vendorDTO) throws ObjectAlreadyExists {
         if (vendorRepository.findAllByTitle(vendorDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException(" with name already exists");
+            throw new ObjectAlreadyExists(Vendor.class.getName());
         }
         return mapToDTO(vendorRepository.save(mapToEntity(vendorDTO)));
     }

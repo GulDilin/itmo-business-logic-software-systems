@@ -1,6 +1,7 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.ProcessDTO;
+import guldilin.exceptions.NoSuchObject;
 import guldilin.model.Process;
 import guldilin.repository.MedicamentRepository;
 import guldilin.repository.ProcessRepository;
@@ -28,31 +29,23 @@ public class ProcessServiceImpl implements ProcessService {
 
     @Override
     public List<ProcessDTO> getAll(String status, Long medicamentId) {
-        List<Process> processList;
-
-        if (status != null) {
-            processList = processRepository.findAllByStatus(status);
-        } else if (medicamentId != null) {
-            processList = processRepository.findAllByMedicamentId(medicamentId);
-        } else {
-            processList = processRepository.findAll();
-        }
-        return processList.stream()
+        return processRepository.findAll()
+                .stream()
+                .filter(e -> status == null || e.getStatus().equals(status))
+                .filter(e -> e.getMedicament().getId().equals(medicamentId))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ProcessDTO get(Integer id) {
-        Optional<Process> found = processRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such process");
+    public ProcessDTO get(Integer id) throws NoSuchObject {
+        return  mapToDTO(processRepository.findById(Long.valueOf(id)).orElseThrow(
+                () -> new NoSuchObject(Process.class.getName())
+        ));
     }
 
     @Override
-    public ProcessDTO create(ProcessDTO processDTO) {
+    public ProcessDTO create(ProcessDTO processDTO) throws NoSuchObject {
         processDTO.setId(null);
         return mapToDTO(processRepository.save(mapToEntity(processDTO)));
     }
@@ -61,12 +54,12 @@ public class ProcessServiceImpl implements ProcessService {
         return new ProcessDTO((process));
     }
 
-    private Process mapToEntity(ProcessDTO processDTO) {
+    private Process mapToEntity(ProcessDTO processDTO) throws NoSuchObject {
         Process process = modelMapper.map(processDTO, Process.class);
         if (processDTO.getMedicament() != null) {
             process.setMedicament(
                     medicamentRepository.findById(processDTO.getMedicament())
-                            .orElseThrow(() -> new IllegalArgumentException("No such medicament")));
+                            .orElseThrow(() -> new NoSuchObject(Process.class.getName())));
         }
         return process;
     }
