@@ -68,16 +68,4 @@ public class JmsConsumerImpl implements JmsConsumer {
             e.printStackTrace();
         }
     }
-
-    private MedicamentVendorInfoDTO mapToDTO(MedicamentVendorInfo medicamentVendorInfo) {
-        return modelMapper.map(medicamentVendorInfo, MedicamentVendorInfoDTO.class);
-    }
-
-    private MedicamentDTO mapToDTO(Medicament medicament) {
-        return modelMapper.map(medicament, MedicamentDTO.class);
-    }
-
-    private VendorDTO mapToDTO(Vendor vendor) {
-        return modelMapper.map(vendor, VendorDTO.class);
-    }
 }
