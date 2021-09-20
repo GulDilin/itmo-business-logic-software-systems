@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface ProcessRepository extends JpaRepository<Process, Long> {
     List<Process> findAllByStatus(String status);
-    List<Process> findAllByMedicament(Medicament medicament);
     List<Process> findAllByMedicamentId(Long medicamentId);
 }
