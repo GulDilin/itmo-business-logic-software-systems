@@ -2,6 +2,7 @@ package guldilin.service.implementation;
 
 import guldilin.dto.WorkerDTO;
 import guldilin.dto.WorkerRegistrationRequestDTO;
+import guldilin.exceptions.NoSuchObject;
 import guldilin.model.Worker;
 import guldilin.repository.WorkerRepository;
 import guldilin.repository.WorkerRoleRepository;
@@ -37,31 +38,20 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public List<WorkerDTO> getAll(String name, Long workerRoleId, String email, String login, String password) {
-        List<Worker> workerList;
-
-
-        if (name != null) {
-            workerList = workerRepository.findAllByName(name);
-        } else if (workerRoleId != null) {
-            workerList = workerRepository.findAllByRoleId(workerRoleId);
-        } else if (email != null) {
-            workerList = workerRepository.findAllByEmail(email);
-        } else {
-            workerList = workerRepository.findAll();
-        }
-        return workerList.stream()
+        return workerRepository.findAll()
+                .stream()
+                .filter(w -> name == null || w.getName().equals(name))
+                .filter(w -> workerRoleId == null || w.getRole().getId().equals(workerRoleId))
+                .filter(w -> email == null || w.getEmail().equals(email))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
 
     @Override
-    public WorkerDTO get(Integer id) {
-        Optional<Worker> found = workerRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such worker");
+    public WorkerDTO get(Integer id) throws NoSuchObject {
+        return mapToDTO(workerRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NoSuchObject(Worker.class.getName())));
     }
 
     @Override

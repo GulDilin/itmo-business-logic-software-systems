@@ -1,6 +1,8 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.MedicamentTypeDTO;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.exceptions.ObjectAlreadyExists;
 import guldilin.model.MedicamentType;
 import guldilin.repository.MedicamentTypeRepository;
 import guldilin.service.interfaces.MedicamentTypeService;
@@ -40,19 +42,16 @@ public class MedicamentTypeServiceImpl implements MedicamentTypeService {
     }
 
     @Override
-    public MedicamentTypeDTO get(Integer id) {
-        Optional<MedicamentType> found = medicamentTypeRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such medicament class");
+    public MedicamentTypeDTO get(Integer id) throws NoSuchObject {
+        return mapToDTO(medicamentTypeRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NoSuchObject(MedicamentType.class.getName())));
     }
 
     @Override
-    public MedicamentTypeDTO create(MedicamentTypeDTO medicamentTypeDTO) {
+    public MedicamentTypeDTO create(MedicamentTypeDTO medicamentTypeDTO) throws ObjectAlreadyExists, NoSuchObject {
         medicamentTypeDTO.setId(null);
         if (medicamentTypeRepository.findAllByTitle(medicamentTypeDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException("Medicament class with title already exists");
+            throw new ObjectAlreadyExists(MedicamentType.class.getName());
         }
         return mapToDTO(medicamentTypeRepository.save(mapToEntity(medicamentTypeDTO)));
     }
@@ -61,15 +60,13 @@ public class MedicamentTypeServiceImpl implements MedicamentTypeService {
         return new MedicamentTypeDTO(medicamentType);
     }
 
-    private MedicamentType mapToEntity(MedicamentTypeDTO medicamentTypeDTO) {
+    private MedicamentType mapToEntity(MedicamentTypeDTO medicamentTypeDTO) throws NoSuchObject {
         MedicamentType medicamentType = modelMapper.map(medicamentTypeDTO, MedicamentType.class);
         if (medicamentTypeDTO.getParentClass() != null) {
             medicamentType.setParentClass(
                     medicamentTypeRepository.findById(medicamentTypeDTO.getParentClass())
-                            .orElseThrow(() -> new IllegalArgumentException("No such worker parent class")));
+                            .orElseThrow(() -> new NoSuchObject(MedicamentType.class.getName())));
         }
-
-
         return medicamentType;
     }
 }

@@ -1,5 +1,9 @@
 package guldilin.controller;
 
+import guldilin.config.ErrorCodes;
+import guldilin.dto.ErrorDTO;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.exceptions.ObjectAlreadyExists;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
@@ -27,19 +31,39 @@ public interface ValidationExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({SQLException.class, DataAccessException.class})
-    default Map<String, String> handleDatabaseError() {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error", "Internal Server Error");
-        errors.put("message", "Database Error");
-        return errors;
+    default ErrorDTO handleDatabaseError(Exception ex) {
+        return ErrorDTO.builder()
+                .error(ErrorCodes.DATABASE_ERROR)
+                .message(ex.getMessage())
+                .build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({IllegalArgumentException.class, InvalidDataAccessApiUsageException.class})
-    default Map<String, String> handleIllegalArgument(Exception ex) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error", "Bad Request");
-        errors.put("message", ex.getMessage());
-        return errors;
+    @ExceptionHandler({NoSuchObject.class, InvalidDataAccessApiUsageException.class})
+    default ErrorDTO handleIllegalArgument(Exception ex) {
+        return ErrorDTO.builder()
+                .error(ErrorCodes.ILLEGAL_ARGUMENT)
+                .message(ex.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({NoSuchObject.class})
+    default ErrorDTO handleNoSuchObject(NoSuchObject ex) {
+        return ErrorDTO.builder()
+                .error(ErrorCodes.NO_SUCH_OBJECT)
+                .message(ex.getMessage())
+                .model(ex.getModel())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ObjectAlreadyExists.class})
+    default ErrorDTO handleObjectAlreadyExists(ObjectAlreadyExists ex) {
+        return ErrorDTO.builder()
+                .error(ErrorCodes.OBJECT_ALREADY_EXISTS)
+                .message(ex.getMessage())
+                .model(ex.getModel())
+                .build();
     }
 }

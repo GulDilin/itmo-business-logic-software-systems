@@ -1,11 +1,14 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.ProcessApproveDTO;
+import guldilin.exceptions.NoSuchObject;
 import guldilin.model.ProcessApprove;
+import guldilin.model.Worker;
 import guldilin.repository.ProcessApproveRepository;
 import guldilin.repository.ProcessRepository;
 import guldilin.repository.WorkerRepository;
 import guldilin.service.interfaces.ProcessApproveService;
+import org.hibernate.jdbc.Work;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -32,35 +35,28 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
     @Override
-    public List<ProcessApproveDTO> getAll(String level, Long processApproveById, Long processApproveToId, Date create, Date update) {
-        List<ProcessApprove> ProcessApproveList;
-
-        if (level != null) {
-            ProcessApproveList = processApproveRepository.findAllByLevel(level);
-        } else if (processApproveById != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerBy(processApproveById);
-        } else if (processApproveToId != null) {
-            ProcessApproveList = processApproveRepository.findAllByWorkerTo(processApproveToId);
-        } else if (create != null) {
-            ProcessApproveList = processApproveRepository.findAllByCreated(create);
-        } else if (update != null) {
-            ProcessApproveList = processApproveRepository.findAllByUpdated(update);
-        } else{
-            ProcessApproveList = processApproveRepository.findAll();
-        }
-        return ProcessApproveList.stream()
+    public List<ProcessApproveDTO> getAll(
+            String level, Long processApproveById, Long processApproveToId, Date create, Date update) {
+        return processApproveRepository
+                .findAll()
+                .stream()
+                .filter(p -> level == null || p.getLevel().equals(Integer.parseInt(level)))
+                .filter(p -> processApproveById == null || p.getWorkerBy().equals(processApproveById))
+                .filter(p -> processApproveToId == null || p.getWorkerTo().equals(processApproveToId))
+                .filter(p -> create == null || p.getCreated().equals(create))
+                .filter(p -> update == null || p.getUpdated().equals(update))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
 
     @Override
-    public ProcessApproveDTO get(Integer id) {
+    public ProcessApproveDTO get(Integer id) throws NoSuchObject {
         Optional<ProcessApprove> found = processApproveRepository.findById(Long.valueOf(id));
         if (found.isPresent()) {
             return mapToDTO(found.get());
         }
-        throw new IllegalArgumentException("No such process approve");
+        throw new NoSuchObject(Process.class.getName());
     }
 
     @Override
@@ -81,9 +77,9 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
     }
 
     @Override
-    public ProcessApproveDTO update(ProcessApproveDTO processApproveDTO) {
+    public ProcessApproveDTO update(ProcessApproveDTO processApproveDTO) throws NoSuchObject {
         processApproveRepository.findById(processApproveDTO.getId())
-                .orElseThrow( () -> new IllegalArgumentException("No such process approve") );
+                .orElseThrow( () -> new NoSuchObject(Process.class.getName()) );
         processApproveDTO.setUpdated(new Date());
         return mapToDTO(processApproveRepository.save(mapToEntity(processApproveDTO)));
     }
@@ -92,23 +88,23 @@ public class ProcessApproveServiceImpl implements ProcessApproveService {
         return new ProcessApproveDTO(processApprove);
     }
 
-    private ProcessApprove mapToEntity(ProcessApproveDTO processApproveDTO) {
+    private ProcessApprove mapToEntity(ProcessApproveDTO processApproveDTO) throws NoSuchObject {
 
         ProcessApprove processApprove = modelMapper.map(processApproveDTO, ProcessApprove.class);
         if (processApproveDTO.getProcess() != null) {
             processApprove.setProcess(
                     processRepository.findById(processApproveDTO.getProcess())
-                            .orElseThrow(() -> new IllegalArgumentException("No such process")));
+                            .orElseThrow(() -> new NoSuchObject(Process.class.getName())));
         }
         if (processApproveDTO.getWorkerBy() != null) {
             processApprove.setWorkerBy(
                     workerRepository.findById(processApproveDTO.getWorkerBy())
-                            .orElseThrow(() -> new IllegalArgumentException("No such workerBy")).getId());
+                            .orElseThrow(() -> new NoSuchObject(Worker.class.getName())).getId());
         }
         if (processApproveDTO.getWorkerTo() != null) {
             processApprove.setWorkerTo(
                     workerRepository.findById(processApproveDTO.getWorkerTo())
-                            .orElseThrow(() -> new IllegalArgumentException("No such workerTo")).getId());
+                            .orElseThrow(() -> new NoSuchObject(Worker.class.getName())).getId());
         }
 
         return processApprove;

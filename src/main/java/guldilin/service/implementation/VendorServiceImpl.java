@@ -1,6 +1,8 @@
 package guldilin.service.implementation;
 
 import guldilin.dto.VendorDTO;
+import guldilin.exceptions.NoSuchObject;
+import guldilin.exceptions.ObjectAlreadyExists;
 import guldilin.model.Vendor;
 import guldilin.repository.VendorRepository;
 import guldilin.service.interfaces.VendorService;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,36 +26,26 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public List<VendorDTO> getAll(String title, String address, String contact) {
-        List<Vendor> workerList;
-
-        if (title != null) {
-            workerList = vendorRepository.findAllByTitle(title);
-        } else if (address != null) {
-            workerList = vendorRepository.findAllByAddress(address);
-        } else if (contact != null) {
-            workerList = vendorRepository.findAllByContact(contact);
-        } else {
-            workerList = vendorRepository.findAll();
-        }
-        return workerList.stream()
+        return vendorRepository.findAll()
+                .stream()
+                .filter(e -> title == null || e.getTitle().equals(title))
+                .filter(e -> address == null || e.getAddress().equals(address))
+                .filter(e -> contact == null || e.getContact().equals(contact))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
 
     @Override
-    public VendorDTO get(Integer id) {
-        Optional<Vendor> found = vendorRepository.findById(Long.valueOf(id));
-        if (found.isPresent()) {
-            return mapToDTO(found.get());
-        }
-        throw new IllegalArgumentException("No such vendor");
+    public VendorDTO get(Integer id) throws NoSuchObject {
+        return mapToDTO(vendorRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NoSuchObject(Vendor.class.getName())));
     }
 
     @Override
-    public VendorDTO create(VendorDTO vendorDTO) {
+    public VendorDTO create(VendorDTO vendorDTO) throws ObjectAlreadyExists {
         if (vendorRepository.findAllByTitle(vendorDTO.getTitle()).size() > 0) {
-            throw new IllegalArgumentException(" with name already exists");
+            throw new ObjectAlreadyExists(Vendor.class.getName());
         }
         return mapToDTO(vendorRepository.save(mapToEntity(vendorDTO)));
     }
